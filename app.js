@@ -179,31 +179,12 @@ function renderTarot(){
   $("#tarot-detail").innerHTML=html;
 }
 
-// ========== 八字（節氣以固定日期近似）==========
-const JIE=[6,4,6,5,6,6,7,8,8,8,7,7]; // 每月「節」日期：小寒、立春、驚蟄…大雪
-function bazi(y,m,d,hz){
-  const ey=(m>2||(m===2&&d>=4))?y:y-1;
-  const yg=((ey-4)%10+10)%10,yz=((ey-4)%12+12)%12;
-  let mz=m%12;if(d<JIE[m-1])mz=(mz+11)%12;
-  const mg=((yg%5)*2+2+((mz-2+12)%12))%10;
-  const days=Math.round((Date.UTC(y,m-1,d)-Date.UTC(1900,0,1))/864e5);
-  const dg=((days%10)+10)%10,dz=(((days+10)%12)+12)%12;   // 1900-01-01 為甲戌日
-  const hg=((dg%5)*2+hz)%10;
-  return[[yg,yz],[mg,mz],[dg,dz],[hg,hz]];
-}
+// ========== 八字（計算在 bazi.js）==========
 function renderBazi(){
   if(S.hour===null){
     $("#bazi").innerHTML=`<div class="card"><div class="need">請填寫時辰</div>
       <p style="text-align:center"><small>八字需要出生時辰，請按上方「返回修改」補填。</small></p></div>`;
     return;
   }
-  const P0=bazi(S.y,S.m,S.d,S.hour),P=[...P0].reverse(),names=["時柱","日柱","月柱","年柱"],cnt={木:0,火:0,土:0,金:0,水:0};
-  P.forEach(([g,z])=>{cnt[GAN_WX[g]]++;cnt[ZHI_WX[z]]++});
-  const lack=Object.keys(cnt).filter(k=>!cnt[k]);
-  $("#bazi").innerHTML=`<div class="card"><h3>四柱八字</h3>
-    <div class="pillars">${P.map(([g,z],i)=>`<div><small>${names[i]}</small><b>${GAN[g]}<br>${ZHI[z]}</b></div>`).join("")}</div>
-    <p>日主：<strong>${GAN[P[1][0]]}（${GAN_WX[P[1][0]]}）</strong></p>
-    <p>五行：${Object.entries(cnt).map(([k,v])=>`${k}${v}`).join("　")}</p>
-    <p>${lack.length?"五行缺："+lack.join("、"):"五行俱全"}</p>
-    <p class="note">節氣以固定日期近似，出生在節氣交接當天，月柱可能差一個月，請以萬年曆為準。</p></div>`;
+  $("#bazi").innerHTML=baziHtml(S,S.hour);
 }

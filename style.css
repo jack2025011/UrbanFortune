@@ -76,3 +76,12 @@ footer{text-align:center;color:var(--sub);font-size:.8rem;padding:24px}
 .hidden{display:none}
 .toggle{display:block;width:100%;margin:0 0 15px;padding:13px;background:#fff;color:var(--brand);border:2px solid var(--brand);border-radius:8px;font-size:16px;font-weight:600;cursor:pointer}
 .toggle.open{background:var(--brand);color:#fff}
+
+/* 八字命盤表 */
+.mp{width:100%;border-collapse:collapse;font-size:14px;text-align:center}
+.mp th,.mp td{padding:7px 2px;border-bottom:1px solid #eee;vertical-align:middle;line-height:1.6}
+.mp th{color:var(--sub);font-weight:500;width:15%;white-space:nowrap}
+.mp tr.hd th{background:#555;color:#fff;font-weight:600}
+.mp tr:nth-child(even) td,.mp tr:nth-child(even) th{background:#f3f4f6}
+.mp .big{font-size:28px;font-weight:700;line-height:1.2}
+.wxm{color:#2e9e2e}.wxh{color:#e02020}.wxt{color:#a0561a}.wxj{color:#f08c00}.wxs{color:#1a1ad8}

@@ -197,7 +197,7 @@ function baziHtml(S,hz){
     return`<div class="ss"><div class="ss-h"><b>${n}</b><span class="tag ${c===0?"no":c>=3?"hi":""}">${lvl}</span></div>
       <p>${c===0?t.none:(c>=3?t.core+t.many:t.core)}</p>${items}</div>`;
   }).join("");
-  const anaCard=`<button class="toggle" data-target="ss-detail" data-label="十神解析">查看十神解析</button>
+  const anaCard=`<button class="toggle" data-lock="1" data-target="ss-detail" data-label="十神解析">查看十神解析</button>
     <div id="ss-detail" class="hidden"><div class="card"><h3>各柱位置的意義</h3>${posLegend}</div>
     <div class="card"><h3>十神解析</h3>${analysis}
     <p class="note">以上為十神的一般性說明，依日主「${GAN[me]}${GAN_WX[me]}」計算；同一個十神出現在不同柱，意義會不同。實際強弱還要看月令、合沖與大運，僅供參考。</p></div></div>`;

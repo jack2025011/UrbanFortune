@@ -83,12 +83,40 @@ function showTab(t){
 }
 document.querySelectorAll("#tabs a").forEach(a=>a.onclick=()=>showTab(a.dataset.tab));
 
-document.addEventListener("click",e=>{              // 解析按鈕（含動態產生的）
-  const b=e.target.closest(".toggle");if(!b)return;
+// ========== 解析按鈕與密碼鎖 ==========
+// 注意：這是純網頁的簡易鎖，用來擋一般使用者；懂程式的人仍可從原始碼看到內容。
+const PW_HASH="813b461f7e654a4bb1da3cbc1e405a89d33d3c0b57d8bfb67d8217d66df2097f",PW_SALT="urbanfortune|";
+let unlocked=false,pending=null;
+try{unlocked=sessionStorage.getItem("uf.unlock")==="1"}catch(e){}
+const applyUnlock=()=>document.body.classList.toggle("unlocked",unlocked);
+applyUnlock();
+async function sha256(s){
+  const buf=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));
+  return[...new Uint8Array(buf)].map(x=>x.toString(16).padStart(2,"0")).join("");
+}
+function doToggle(b){
   const t=$("#"+b.dataset.target),open=t.classList.toggle("hidden")===false;
   b.textContent=(open?"收起":"查看")+b.dataset.label;
   b.classList.toggle("open",open);
+}
+function openLock(){$("#lock-pw").value="";$("#lock-err").textContent="";$("#lock").hidden=false;setTimeout(()=>$("#lock-pw").focus(),50)}
+function closeLock(){$("#lock").hidden=true;pending=null}
+async function tryUnlock(){
+  let ok=false;
+  try{ok=(await sha256(PW_SALT+$("#lock-pw").value))===PW_HASH}catch(e){$("#lock-err").textContent="此瀏覽器不支援解鎖，請改用 Safari 或 Chrome";return}
+  if(!ok){$("#lock-err").textContent="密碼錯誤";return}
+  unlocked=true;try{sessionStorage.setItem("uf.unlock","1")}catch(e){}
+  applyUnlock();const b=pending;closeLock();if(b)doToggle(b);
+}
+document.addEventListener("click",e=>{
+  const b=e.target.closest(".toggle");if(!b)return;
+  if(b.dataset.lock&&!unlocked){pending=b;openLock();return}
+  doToggle(b);
 });
+$("#lock-ok").onclick=tryUnlock;
+$("#lock-cancel").onclick=closeLock;
+$("#lock-pw").addEventListener("keydown",e=>{if(e.key==="Enter")tryUnlock()});
+$("#lock").addEventListener("click",e=>{if(e.target.id==="lock")closeLock()});
 function renderAll(){renderZodiac();renderNumerology();renderTarot();renderBazi()}
 
 // ========== 星座 ==========
@@ -181,13 +209,32 @@ function reduce9(n){
   while(String(s).length>1)s=digitSum(s);
   return s===0?9:s;
 }
+const isLeap=y=>(y%4===0&&y%100!==0)||y%400===0;
+function liunianNum(y){                                   // 生日月日＋該年西元數字
+  const [M1,M2,D1,D2]=[...S.mm,...S.dd].map(Number),[Y1,Y2,Y3,Y4]=[...String(y)].map(Number);
+  return reduce9(reduce9(reduce9(M1+M2)+reduce9(D1+D2))+reduce9(reduce9(Y1+Y2)+reduce9(Y3+Y4)));
+}
+function birthdayIn(y){return new Date(y,S.m-1,(S.m===2&&S.d===29&&!isLeap(y))?28:S.d)}
+const fmtD=d=>`${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,"0")}/${String(d.getDate()).padStart(2,"0")}`;
+const dayBefore=d=>new Date(d.getFullYear(),d.getMonth(),d.getDate()-1);
 function renderLiuNian(){
-  const yr=String(new Date().getFullYear());              // 流年：今年
-  const [M1,M2,D1,D2]=[...S.mm,...S.dd].map(Number),[Y1,Y2,Y3,Y4]=[...yr].map(Number);
-  const P5=reduce9(reduce9(M1+M2)+reduce9(D1+D2)),P7=reduce9(reduce9(Y1+Y2)+reduce9(Y3+Y4));
-  const n=reduce9(P5+P7),a=LIU_NIAN_ANALYSIS[n];
-  $("#ln-year").textContent=yr;$("#ln-num").textContent=n;
-  $("#ln-theme").textContent=a.theme;$("#ln-advice").textContent=a.advice;
+  const now=new Date(),Y=now.getFullYear();
+  const start=birthdayIn(Y),nextStart=birthdayIn(Y+1);
+  const n0=liunianNum(Y),n1=liunianNum(Y+1);
+  let early="";
+  if(now<start){
+    const pn=liunianNum(Y-1);
+    early=`<p class="note">今年的生日還沒到，目前仍屬 ${Y-1} 年的流年（${pn}），到 ${fmtD(dayBefore(start))} 為止。</p>`;
+  }
+  const box=(t,y,n,period)=>`<div class="ln-box"><div class="ln-t">${t}</div><div class="ln-y">${y} 年</div><div class="ln-n">${n}</div><div class="ln-p">${period}</div></div>`;
+  const ana=(t,y,n)=>{const a=LIU_NIAN_ANALYSIS[n];return`<h4>${t}（${y}）流年 ${n}</h4><p><b>年度主題：</b>${a.theme}</p><p><b>建議：</b>${a.advice}</p>`};
+  $("#liunian").innerHTML=`<div class="card"><h3>流年</h3>
+    <div class="ln-grid">
+      ${box("今年度流年",Y,n0,`${fmtD(start)}<br>～ ${fmtD(dayBefore(nextStart))}`)}
+      ${box("明年度流年",Y+1,n1,`${fmtD(nextStart)}<br>起開始`)}
+    </div>${early}
+    <p><small>流年以每年生日為換年點。</small></p></div>
+    <div class="card analysis"><h3>流年解析</h3>${ana("今年度",Y,n0)}${ana("明年度",Y+1,n1)}</div>`;
 }
 
 // ========== 生命塔羅 ==========

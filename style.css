@@ -173,3 +173,4 @@ body.unlocked .toggle[data-lock]::before{content:"✦ "}
 .lock-box h3::before{content:""}
 .lock-box .err{margin:8px 0 0}
 .lock-ok{margin-top:0;padding:12px;font-size:16px;letter-spacing:.2em}
+.ln-grid+.analysis,.ln-grid+.note+.analysis{margin-top:6px}

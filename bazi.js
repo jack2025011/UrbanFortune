@@ -154,8 +154,8 @@ function baziHtml(S,hz){
   const names4=["年","月","日","時"],cntS={},posS={};
   SHISHEN_ORDER.forEach(n=>{cntS[n]=0;posS[n]=[]});
   P.forEach(([g,z],i)=>{
-    if(i!==2){const n=shishen(me,g);cntS[n]++;posS[n].push(`${names4[i]}柱天干`)}
-    HIDDEN[z].forEach(h=>{const n=shishen(me,h);cntS[n]++;posS[n].push(`${names4[i]}柱藏干（${GAN[h]}）`)});
+    if(i!==2){const n=shishen(me,g);cntS[n]++;posS[n].push({i,t:"天干",g})}
+    HIDDEN[z].forEach(h=>{const n=shishen(me,h);cntS[n]++;posS[n].push({i,t:"藏干",g:h})});
   });
   // 旺相休囚死：依月令五行
   const mw=[2,3].includes(P[1][1])?"木":[5,6].includes(P[1][1])?"火":[8,9].includes(P[1][1])?"金":[11,0].includes(P[1][1])?"水":"土";
@@ -170,16 +170,20 @@ function baziHtml(S,hz){
   const wxCard=`<div class="card"><h3>五行與十神</h3>
     <table class="mp2"><tr class="hd"><th>五行</th><th>月令</th><th>十神數量</th></tr>${wxRows}</table>
     <p><small>以月支「${ZHI[P[1][1]]}」為當令（${mw}旺）；十神數量＝天干（不含日主）＋所有藏干。</small></p></div>`;
-  // ===== 十神解析 =====
+  // ===== 十神解析（依所在柱位）=====
+  const posLegend=POS_MEANING.map(p=>`<p><b>${p.name}</b>：${p.who}<br><small>${p.desc}</small></p>`).join("")
+    +`<p><small>天干＝外顯、別人看得到的表現；藏干＝內在、潛藏或較晚才顯現的特質。</small></p>`;
   const analysis=SHISHEN_ORDER.map(n=>{
     const c=cntS[n],t=SHISHEN_TEXT[n];
     const lvl=c===0?"無":c===1?"1個":c===2?"2個・適中":`${c}個・偏多`;
-    const body=c===0?t.none:(c>=3?t.core+t.many:t.core);
+    const items=posS[n].sort((x,y)=>x.i-y.i).map(o=>
+      `<div class="occ"><b>${POS_MEANING[o.i].name}${o.t}（${GAN[o.g]}）</b><p><small>${o.t==="天干"?"外顯":"內在"}</small>　${SS_POS[n][o.i]}</p></div>`).join("");
     return`<div class="ss"><div class="ss-h"><b>${n}</b><span class="tag ${c===0?"no":c>=3?"hi":""}">${lvl}</span></div>
-      <p>${body}</p>${c?`<p class="pos">位置：${posS[n].join("、")}</p>`:""}</div>`;
+      <p>${c===0?t.none:(c>=3?t.core+t.many:t.core)}</p>${items}</div>`;
   }).join("");
-  const anaCard=`<div class="card"><h3>十神解析</h3>${analysis}
-    <p class="note">以上為十神的一般性說明，依日主「${GAN[me]}${GAN_WX[me]}」計算數量；實際強弱還要看月令、合沖與大運，僅供參考。</p></div>`;
+  const anaCard=`<div class="card"><h3>各柱位置的意義</h3>${posLegend}</div>
+    <div class="card"><h3>十神解析</h3>${analysis}
+    <p class="note">以上為十神的一般性說明，依日主「${GAN[me]}${GAN_WX[me]}」計算；同一個十神出現在不同柱，意義會不同。實際強弱還要看月令、合沖與大運，僅供參考。</p></div>`;
   return`<div class="card"><h3>命盤</h3>${table}</div>${info}${wxCard}${anaCard}
     <p class="note">節氣由太陽位置推算，誤差約十分鐘內；出生在節氣交接當天請以萬年曆為準。時間取該時辰的起始整點。</p>`;
 }

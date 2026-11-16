@@ -95,3 +95,4 @@ footer{text-align:center;color:var(--sub);font-size:.8rem;padding:24px}
 .tag{font-size:13px;padding:2px 10px;border-radius:999px;background:#e9f2ff;color:var(--brand)}
 .tag.no{background:#f1f1f1;color:#888}.tag.hi{background:#ffe9e9;color:var(--red)}
 .ss p{margin:6px 0}.ss .pos{font-size:13px;color:var(--sub)}
+.occ{background:#f7f9fc;border-left:4px solid var(--brand);border-radius:6px;padding:8px 12px;margin:8px 0}.occ b{color:var(--text);font-size:14px}.occ p{margin:4px 0;font-size:15px}

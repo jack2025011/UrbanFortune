@@ -20,6 +20,8 @@ $("#go").onclick=()=>{
   err("");
   const h=$("#shichen").value;
   S={y,m,d,digits:v,mm:v.slice(4,6),dd:v.slice(6,8),hour:h===""?null:+h};
+  const nm=$("#uname").value.trim();
+  $("#i-name").textContent=nm;$("#i-name-row").style.display=nm?"":"none";
   $("#i-dob").textContent=`${v.slice(0,4)} / ${S.mm} / ${S.dd}`;
   $("#i-sc").textContent=S.hour===null?"未填":SHICHEN[S.hour];
   renderAll();

@@ -36,6 +36,11 @@ function showTab(t){
 }
 document.querySelectorAll("#tabs a").forEach(a=>a.onclick=()=>showTab(a.dataset.tab));
 
+document.querySelectorAll(".toggle").forEach(b=>b.onclick=()=>{
+  const t=$("#"+b.dataset.target),open=t.classList.toggle("hidden")===false;
+  b.textContent=(open?"收起":"查看")+b.dataset.label;
+  b.classList.toggle("open",open);
+});
 function renderAll(){renderZodiac();renderNumerology();renderTarot();renderBazi()}
 
 // ========== 星座 ==========
@@ -95,7 +100,6 @@ function renderNumerology(){
       conns+=`<li><strong>✅ ${p.join("-")} 連線 (${m.name})：</strong>${m.trait}</li>`;
   });
   $("#ls-detail").innerHTML=`
-  <h2 class="sec">詳細解析</h2>
   <div class="card analysis"><h3>🥇 主命數 解析</h3>
     <div class="result-number"><small>主命數</small>${LS.lifePath}</div>
     <p>${lifePathMeanings[LS.lifePath]||""}</p></div>
@@ -130,27 +134,12 @@ function reduce9(n){
   return s===0?9:s;
 }
 function renderLiuNian(){
-  const yr=String(new Date().getFullYear()+1);           // 流年：明年
+  const yr=String(new Date().getFullYear());              // 流年：今年
   const [M1,M2,D1,D2]=[...S.mm,...S.dd].map(Number),[Y1,Y2,Y3,Y4]=[...yr].map(Number);
-  const P={};
-  P[1]=reduce9(M1+M2);P[2]=reduce9(D1+D2);P[3]=reduce9(Y1+Y2);P[4]=reduce9(Y3+Y4);
-  P[5]=reduce9(P[1]+P[2]);P[7]=reduce9(P[3]+P[4]);P[10]=reduce9(P[5]+P[7]);
-  $("#ln-year").textContent=yr;
-  $("#ln-guo").textContent=`${P[3]}${P[4]}${P[7]}`;
-  $("#ln-liu").textContent=`${P[5]}${P[7]}${P[10]}`;
-  $("#ln-num").textContent=P[10];
-  const a=LIU_NIAN_ANALYSIS[P[10]];
+  const P5=reduce9(reduce9(M1+M2)+reduce9(D1+D2)),P7=reduce9(reduce9(Y1+Y2)+reduce9(Y3+Y4));
+  const n=reduce9(P5+P7),a=LIU_NIAN_ANALYSIS[n];
+  $("#ln-year").textContent=yr;$("#ln-num").textContent=n;
   $("#ln-theme").textContent=a.theme;$("#ln-advice").textContent=a.advice;
-
-  // 金字塔數字位置（沿用原站）
-  const H=5,HM=11,pos=[
-    [1,`${12.5+H}%`,`calc(7.5% / 0.75)`],[2,"37.5%",`calc(7.5% / 0.75)`],
-    [3,"62.5%",`calc(7.5% / 0.75)`],[4,`${87.5-H}%`,`calc(7.5% / 0.75)`],
-    [5,`${25+HM}%`,`calc(24% / 0.75)`],[7,`${75-HM}%`,`calc(24% / 0.75)`],[10,"50%","55%"]];
-  $("#pyramid-numbers").innerHTML=pos.map(([id,l,b])=>
-    `<span class="pyramid-number" style="left:${l};bottom:${b}">${P[id]}</span>`).join("");
-  const grp=s=>`<div class="dob-group">${[...s].map(c=>`<div class="dob-digit">${c}</div>`).join("")}</div>`;
-  $("#dob-sequence").innerHTML=grp(S.mm+S.dd)+grp(yr);
 }
 
 // ========== 生命塔羅 ==========
@@ -174,8 +163,7 @@ function renderTarot(){
   const block=(title,n,body)=>`<div class="card analysis"><h3>${title}</h3><p><strong>卡號 ${n}：${nm(n)}</strong></p>${body}</div>`;
   const plain=(t,n)=>block(t,n,`<p>${ANALYSIS_DATA[key(n)]||"暫無解析"}</p>`);
   const love=LOVE_ANALYSIS_DATA[key(c[2])],car=CAREER_ANALYSIS_DATA[key(c.career)];
-  let html=`<h2 class="sec">詳細解析</h2>`
-    +plain("個性塔羅",c[1])
+  let html=plain("個性塔羅",c[1])
     +block("愛情塔羅",c[2],`<h4>愛情風格</h4><p>${love.style}</p><h4>愛情弱點</h4><p>${love.weakness}</p>`)
     +plain("靈魂塔羅",c[3])+plain("潛能塔羅",c[4])+plain("配牌 1",c[5])+plain("配牌 2",c[6])
     +block("事業塔羅",c.career,`<h4>事業方向</h4><p>${car.main}</p><h4>禁忌</h4><p>${car.forbidden}</p><h4>適合職務</h4><p>${car.suitable_job}</p>`);
@@ -209,12 +197,12 @@ function renderBazi(){
       <p style="text-align:center"><small>八字需要出生時辰，請按上方「返回修改」補填。</small></p></div>`;
     return;
   }
-  const P=bazi(S.y,S.m,S.d,S.hour),names=["年柱","月柱","日柱","時柱"],cnt={木:0,火:0,土:0,金:0,水:0};
+  const P0=bazi(S.y,S.m,S.d,S.hour),P=[...P0].reverse(),names=["時柱","日柱","月柱","年柱"],cnt={木:0,火:0,土:0,金:0,水:0};
   P.forEach(([g,z])=>{cnt[GAN_WX[g]]++;cnt[ZHI_WX[z]]++});
   const lack=Object.keys(cnt).filter(k=>!cnt[k]);
   $("#bazi").innerHTML=`<div class="card"><h3>四柱八字</h3>
     <div class="pillars">${P.map(([g,z],i)=>`<div><small>${names[i]}</small><b>${GAN[g]}<br>${ZHI[z]}</b></div>`).join("")}</div>
-    <p>日主：<strong>${GAN[P[2][0]]}（${GAN_WX[P[2][0]]}）</strong></p>
+    <p>日主：<strong>${GAN[P[1][0]]}（${GAN_WX[P[1][0]]}）</strong></p>
     <p>五行：${Object.entries(cnt).map(([k,v])=>`${k}${v}`).join("　")}</p>
     <p>${lack.length?"五行缺："+lack.join("、"):"五行俱全"}</p>
     <p class="note">節氣以固定日期近似，出生在節氣交接當天，月柱可能差一個月，請以萬年曆為準。</p></div>`;

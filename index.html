@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>URBAN 命理</title>
-<link rel="stylesheet" href="style.css?v=202611160935">
+<link rel="stylesheet" href="style.css?v=202611160937">
 </head>
 <body>
 
@@ -16,6 +16,13 @@
       <h3>輸入生日</h3>
       <label for="uname">姓名（選填）</label>
       <input id="uname" type="text" maxlength="20" placeholder="請輸入姓名或暱稱" autocomplete="off">
+
+      <label for="gender">性別（選填，八字元辰與男女命說明需要）</label>
+      <select id="gender">
+        <option value="">不填</option>
+        <option value="男">男</option>
+        <option value="女">女</option>
+      </select>
 
       <label for="dob">出生日期（西元）</label>
       <input id="dob" type="tel" inputmode="numeric" maxlength="14" placeholder="YYYY / MM / DD" autocomplete="off">
@@ -53,7 +60,7 @@
   <div class="app-bar">URBAN 命理<small>✦ 星象・數字・命盤 ✦</small></div>
   <div class="content">
     <div class="card info">
-      <div><div id="i-name-row">姓名：<strong id="i-name"></strong></div>生日：<strong id="i-dob"></strong>　時辰：<strong id="i-sc"></strong></div>
+      <div><div id="i-name-row"><span id="i-name-wrap">姓名：<strong id="i-name"></strong>　</span><span id="i-gender-wrap">性別：<strong id="i-gender"></strong></span></div>生日：<strong id="i-dob"></strong>　時辰：<strong id="i-sc"></strong></div>
       <button class="back" id="back">返回修改</button>
     </div>
 
@@ -120,8 +127,8 @@
 </div>
 
 <footer>僅供娛樂參考，不構成任何決策建議。</footer>
-<script src="data.js?v=202611160935"></script>
-<script src="bazi.js?v=202611160935"></script>
-<script src="app.js?v=202611160935"></script>
+<script src="data.js?v=202611160937"></script>
+<script src="bazi.js?v=202611160937"></script>
+<script src="app.js?v=202611160937"></script>
 </body>
 </html>

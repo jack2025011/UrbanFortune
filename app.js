@@ -18,14 +18,16 @@ function readInput(){
   if(y<1900||y>new Date().getFullYear()||dt.getFullYear()!==y||dt.getMonth()!==m-1||dt.getDate()!==d)
     return{error:"這個日期不存在，請再確認"};
   const h=$("#shichen").value;
-  return{y,m,d,digits:v,mm:v.slice(4,6),dd:v.slice(6,8),hour:h===""?null:+h,name:$("#uname").value.trim()};
+  return{y,m,d,digits:v,mm:v.slice(4,6),dd:v.slice(6,8),hour:h===""?null:+h,name:$("#uname").value.trim(),gender:$("#gender").value||null};
 }
 const msg=(t,ok)=>{const e=$("#err");e.textContent=t;e.style.color=ok?"var(--gold)":""};
 $("#go").onclick=()=>{
   const r=readInput();
   if(r.error)return msg(r.error);
   msg("");S=r;
-  $("#i-name").textContent=S.name;$("#i-name-row").style.display=S.name?"":"none";
+  $("#i-name").textContent=S.name;$("#i-gender").textContent=S.gender||"";
+  $("#i-name-wrap").style.display=S.name?"":"none";$("#i-gender-wrap").style.display=S.gender?"":"none";
+  $("#i-name-row").style.display=(S.name||S.gender)?"":"none";
   $("#i-dob").textContent=`${S.digits.slice(0,4)}/${S.mm}/${S.dd}`;
   $("#i-sc").textContent=S.hour===null?"未填":SHICHEN[S.hour];
   renderAll();
@@ -41,9 +43,9 @@ const fmtDob=d=>`${d.slice(0,4)} / ${d.slice(4,6)} / ${d.slice(6,8)}`;
 $("#save").onclick=()=>{
   const r=readInput();
   if(r.error)return msg(r.error);
-  const item={name:r.name,dob:r.digits,hour:r.hour};
+  const item={name:r.name,dob:r.digits,hour:r.hour,gender:r.gender};
   let list=loadHist();
-  const i=list.findIndex(x=>x.name===item.name&&x.dob===item.dob&&x.hour===item.hour);
+  const i=list.findIndex(x=>x.name===item.name&&x.dob===item.dob&&x.hour===item.hour&&(x.gender||null)===item.gender);
   if(i>=0)list.splice(i,1);                      // 相同資料就更新到最前面
   list.unshift(item);
   if(!saveHist(list))return msg("這個瀏覽器無法儲存（可能是無痕模式）");
@@ -54,7 +56,7 @@ function renderHist(){
   const list=loadHist(),box=$("#hist-list");
   if(!list.length){box.innerHTML='<p class="empty">還沒有儲存的紀錄</p>';return}
   box.innerHTML=list.map((x,i)=>`<div class="hi" data-i="${i}">
-    <div class="hi-main"><b class="hi-name"></b><span>${fmtDob(x.dob)}　${x.hour===null||x.hour===undefined?"時辰未填":SHICHEN[x.hour]}</span></div>
+    <div class="hi-main"><b class="hi-name"></b><span>${fmtDob(x.dob)}　${x.hour===null||x.hour===undefined?"時辰未填":SHICHEN[x.hour]}${x.gender?"　"+x.gender:""}</span></div>
     <button class="del" data-del="${i}" aria-label="刪除">✕</button></div>`).join("");
   box.querySelectorAll(".hi-name").forEach((el,i)=>el.textContent=list[i].name||"未命名");   // 姓名用 textContent，避免被當成網頁語法
 }
@@ -70,6 +72,7 @@ $("#hist-list").addEventListener("click",e=>{
   $("#uname").value=x.name||"";
   $("#dob").value=fmtDob(x.dob);
   $("#shichen").value=x.hour===null||x.hour===undefined?"":String(x.hour);
+  $("#gender").value=x.gender||"";
   $("#hist-list").classList.add("hidden");
   msg("已讀取："+(x.name||"未命名"),true);
 });

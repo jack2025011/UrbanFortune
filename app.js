@@ -36,7 +36,8 @@ function showTab(t){
 }
 document.querySelectorAll("#tabs a").forEach(a=>a.onclick=()=>showTab(a.dataset.tab));
 
-document.querySelectorAll(".toggle").forEach(b=>b.onclick=()=>{
+document.addEventListener("click",e=>{              // 解析按鈕（含動態產生的）
+  const b=e.target.closest(".toggle");if(!b)return;
   const t=$("#"+b.dataset.target),open=t.classList.toggle("hidden")===false;
   b.textContent=(open?"收起":"查看")+b.dataset.label;
   b.classList.toggle("open",open);

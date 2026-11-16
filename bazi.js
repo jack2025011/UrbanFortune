@@ -197,10 +197,20 @@ function baziHtml(S,hz){
     return`<div class="ss"><div class="ss-h"><b>${n}</b><span class="tag ${c===0?"no":c>=3?"hi":""}">${lvl}</span></div>
       <p>${c===0?t.none:(c>=3?t.core+t.many:t.core)}</p>${items}</div>`;
   }).join("");
-  const anaCard=`<button class="toggle" data-lock="1" data-target="ss-detail" data-label="十神解析">查看十神解析</button>
+  // ===== 神煞解析（依所在柱位）=====
+  const shaPos={};
+  ss.forEach((list,i)=>list.forEach(n=>{(shaPos[n]=shaPos[n]||[]).push(i)}));
+  const shaHtml=SHENSHA_ORDER.filter(n=>shaPos[n]).map(n=>{
+    const t=SHENSHA_INFO[n];
+    const items=shaPos[n].sort((x,y)=>x-y).map(i=>`<div class="occ"><b>${POS_MEANING[i].name}（${ZHI[P[i][1]]}）</b><p>${t.pos[i]}</p></div>`).join("");
+    return`<div class="ss"><div class="ss-h"><b>${n}</b><span class="tag ${t.type==="凶"?"hi":t.type==="中"?"":"ok"}">${t.type==="中"?"吉凶參半":t.type}</span></div><p>${t.core}</p>${items}</div>`;
+  }).join("")||'<p>命盤中沒有出現本站列出的神煞。</p>';
+  const shaCard=`<div class="card"><h3>神煞解析</h3>${shaHtml}
+    <p class="note">神煞是傳統命理的輔助參考，依「所在柱位」看影響的人事時地；吉凶要與整體命盤、大運一起判斷，不宜單看一個神煞下定論。</p></div>`;
+  const anaCard=`<button class="toggle" data-lock="1" data-target="ss-detail" data-label="十神・神煞解析">查看十神・神煞解析</button>
     <div id="ss-detail" class="hidden"><div class="card"><h3>各柱位置的意義</h3>${posLegend}</div>
     <div class="card"><h3>十神解析</h3>${analysis}
-    <p class="note">以上為十神的一般性說明，依日主「${GAN[me]}${GAN_WX[me]}」計算；同一個十神出現在不同柱，意義會不同。實際強弱還要看月令、合沖與大運，僅供參考。</p></div></div>`;
+    <p class="note">以上為十神的一般性說明，依日主「${GAN[me]}${GAN_WX[me]}」計算；同一個十神出現在不同柱，意義會不同。實際強弱還要看月令、合沖與大運，僅供參考。</p></div>${shaCard}</div>`;
   return`<div class="card"><h3>命盤</h3>${table}</div>${info}${wxCard}${anaCard}
     <p class="note">節氣由太陽位置推算，誤差約十分鐘內；出生在節氣交接當天請以萬年曆為準。時間取該時辰的起始整點。</p>`;
 }

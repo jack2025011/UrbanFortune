@@ -178,3 +178,4 @@ body.unlocked .toggle[data-lock]::before{content:"✦ "}
 #ls-detail{margin-top:14px}
 .card .card{background:rgba(255,255,255,.04);backdrop-filter:none;-webkit-backdrop-filter:none;box-shadow:none;margin-bottom:12px;padding:14px}
 #ln-detail{margin-top:14px}
+.tag.ok{background:rgba(226,191,107,.18);color:var(--gold)}

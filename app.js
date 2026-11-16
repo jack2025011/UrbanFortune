@@ -24,7 +24,7 @@ $("#go").onclick=()=>{
   $("#i-sc").textContent=S.hour===null?"未填":SHICHEN[S.hour];
   renderAll();
   $("#v-input").classList.remove("on");$("#v-result").classList.add("on");
-  showTab("zodiac");window.scrollTo(0,0);
+  showTab("numerology");window.scrollTo(0,0);
 };
 $("#back").onclick=()=>{$("#v-result").classList.remove("on");$("#v-input").classList.add("on");window.scrollTo(0,0)};
 

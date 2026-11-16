@@ -30,6 +30,7 @@ $("#go").onclick=()=>{
   $("#i-name-row").style.display=(S.name||S.gender)?"":"none";
   $("#i-dob").textContent=`${S.digits.slice(0,4)}/${S.mm}/${S.dd}`;
   $("#i-sc").textContent=S.hour===null?"未填":SHICHEN[S.hour];
+  S.lunar=lunarDate(S.y,S.m,S.d);$("#i-lunar").textContent=S.lunar.text;
   renderAll();
   $("#v-input").classList.remove("on");$("#v-result").classList.add("on");
   showTab("numerology");window.scrollTo(0,0);
@@ -120,7 +121,7 @@ $("#lock-ok").onclick=tryUnlock;
 $("#lock-cancel").onclick=closeLock;
 $("#lock-pw").addEventListener("keydown",e=>{if(e.key==="Enter")tryUnlock()});
 $("#lock").addEventListener("click",e=>{if(e.target.id==="lock")closeLock()});
-function renderAll(){renderZodiac();renderNumerology();renderTarot();renderBazi()}
+function renderAll(){renderZodiac();renderNumerology();renderTarot();renderBazi();renderDivine()}
 
 // ========== 星座 ==========
 function seeded(str){let h=2166136261;for(const c of str){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}

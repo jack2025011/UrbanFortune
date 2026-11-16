@@ -10,24 +10,69 @@ $("#dob").addEventListener("input",e=>{
   if(v.length>6)f+=" / "+v.slice(6,8);
   e.target.value=f;
 });
-$("#go").onclick=()=>{
+// 讀取並驗證輸入；成功回傳資料，失敗回傳 {error}
+function readInput(){
   const v=$("#dob").value.replace(/\D/g,"");
-  const err=t=>{$("#err").textContent=t};
-  if(v.length!==8)return err("請輸入完整 8 位生日數字，例：19960728");
+  if(v.length!==8)return{error:"請輸入完整 8 位生日數字，例：19960728"};
   const y=+v.slice(0,4),m=+v.slice(4,6),d=+v.slice(6,8),dt=new Date(y,m-1,d);
   if(y<1900||y>new Date().getFullYear()||dt.getFullYear()!==y||dt.getMonth()!==m-1||dt.getDate()!==d)
-    return err("這個日期不存在，請再確認");
-  err("");
+    return{error:"這個日期不存在，請再確認"};
   const h=$("#shichen").value;
-  S={y,m,d,digits:v,mm:v.slice(4,6),dd:v.slice(6,8),hour:h===""?null:+h};
-  const nm=$("#uname").value.trim();
-  $("#i-name").textContent=nm;$("#i-name-row").style.display=nm?"":"none";
-  $("#i-dob").textContent=`${v.slice(0,4)} / ${S.mm} / ${S.dd}`;
+  return{y,m,d,digits:v,mm:v.slice(4,6),dd:v.slice(6,8),hour:h===""?null:+h,name:$("#uname").value.trim()};
+}
+const msg=(t,ok)=>{const e=$("#err");e.textContent=t;e.style.color=ok?"var(--gold)":""};
+$("#go").onclick=()=>{
+  const r=readInput();
+  if(r.error)return msg(r.error);
+  msg("");S=r;
+  $("#i-name").textContent=S.name;$("#i-name-row").style.display=S.name?"":"none";
+  $("#i-dob").textContent=`${S.digits.slice(0,4)} / ${S.mm} / ${S.dd}`;
   $("#i-sc").textContent=S.hour===null?"未填":SHICHEN[S.hour];
   renderAll();
   $("#v-input").classList.remove("on");$("#v-result").classList.add("on");
   showTab("numerology");window.scrollTo(0,0);
 };
+
+// ========== 儲存／歷史（存在這支手機的瀏覽器裡，不會上傳）==========
+const HKEY="urbanfortune.history.v1";
+function loadHist(){try{const l=JSON.parse(localStorage.getItem(HKEY)||"[]");return Array.isArray(l)?l:[]}catch(e){return[]}}
+function saveHist(l){try{localStorage.setItem(HKEY,JSON.stringify(l));return true}catch(e){return false}}
+const fmtDob=d=>`${d.slice(0,4)} / ${d.slice(4,6)} / ${d.slice(6,8)}`;
+$("#save").onclick=()=>{
+  const r=readInput();
+  if(r.error)return msg(r.error);
+  const item={name:r.name,dob:r.digits,hour:r.hour};
+  let list=loadHist();
+  const i=list.findIndex(x=>x.name===item.name&&x.dob===item.dob&&x.hour===item.hour);
+  if(i>=0)list.splice(i,1);                      // 相同資料就更新到最前面
+  list.unshift(item);
+  if(!saveHist(list))return msg("這個瀏覽器無法儲存（可能是無痕模式）");
+  msg("已儲存",true);
+  if(!$("#hist-list").classList.contains("hidden"))renderHist();
+};
+function renderHist(){
+  const list=loadHist(),box=$("#hist-list");
+  if(!list.length){box.innerHTML='<p class="empty">還沒有儲存的紀錄</p>';return}
+  box.innerHTML=list.map((x,i)=>`<div class="hi" data-i="${i}">
+    <div class="hi-main"><b class="hi-name"></b><span>${fmtDob(x.dob)}　${x.hour===null||x.hour===undefined?"時辰未填":SHICHEN[x.hour]}</span></div>
+    <button class="del" data-del="${i}" aria-label="刪除">✕</button></div>`).join("");
+  box.querySelectorAll(".hi-name").forEach((el,i)=>el.textContent=list[i].name||"未命名");   // 姓名用 textContent，避免被當成網頁語法
+}
+$("#hist").onclick=()=>{
+  const box=$("#hist-list"),open=box.classList.toggle("hidden")===false;
+  if(open)renderHist();
+};
+$("#hist-list").addEventListener("click",e=>{
+  const del=e.target.closest("[data-del]");
+  if(del){const list=loadHist();list.splice(+del.dataset.del,1);saveHist(list);renderHist();return}
+  const row=e.target.closest(".hi");if(!row)return;
+  const x=loadHist()[+row.dataset.i];if(!x)return;
+  $("#uname").value=x.name||"";
+  $("#dob").value=fmtDob(x.dob);
+  $("#shichen").value=x.hour===null||x.hour===undefined?"":String(x.hour);
+  $("#hist-list").classList.add("hidden");
+  msg("已讀取："+(x.name||"未命名"),true);
+});
 $("#back").onclick=()=>{$("#v-result").classList.remove("on");$("#v-input").classList.add("on");window.scrollTo(0,0)};
 
 // ========== 分頁 ==========

@@ -7,39 +7,127 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header>
-  <h1>URBAN <span>FORTUNE</span></h1>
-  <p>星座・塔羅・生命靈數・八字</p>
-</header>
-<nav id="tabs">
-  <button data-tab="zodiac" class="on">星座占卜</button>
-  <button data-tab="tarot">生命塔羅</button>
-  <button data-tab="numerology">生命靈數</button>
-  <button data-tab="bazi">八字</button>
-</nav>
-<main>
-  <section id="zodiac" class="panel on">
-    <label>出生日期 <input type="date" id="z-date"></label>
-    <button class="go" id="z-go">看今日運勢</button>
-    <div class="result" id="z-out"></div>
-  </section>
-  <section id="tarot" class="panel">
-    <p class="hint">心裡想著一個問題，按下抽牌（過去・現在・未來）。</p>
-    <button class="go" id="t-go">抽三張牌</button>
-    <div class="cards" id="t-out"></div>
-  </section>
-  <section id="numerology" class="panel">
-    <label>出生日期 <input type="date" id="n-date"></label>
-    <button class="go" id="n-go">計算生命靈數</button>
-    <div class="result" id="n-out"></div>
-  </section>
-  <section id="bazi" class="panel">
-    <label>出生日期 <input type="date" id="b-date"></label>
-    <label>出生時間 <input type="time" id="b-time" value="12:00"></label>
-    <button class="go" id="b-go">排八字</button>
-    <div class="result" id="b-out"></div>
-  </section>
-</main>
+
+<!-- 第一頁：輸入生日 -->
+<div id="v-input" class="view on">
+  <div class="app-bar">URBAN 命理</div>
+  <div class="content">
+    <div class="card">
+      <h3>輸入生日</h3>
+      <label for="dob">出生日期（西元）</label>
+      <input id="dob" type="tel" inputmode="numeric" maxlength="14" placeholder="YYYY / MM / DD" autocomplete="off">
+      <small>* 自動補位，直接打數字即可，例：19960728</small>
+
+      <label for="shichen">時辰（選填，八字需要）</label>
+      <select id="shichen">
+        <option value="">不知道／不填</option>
+        <option value="0">子時（23:00–00:59）</option>
+        <option value="1">丑時（01:00–02:59）</option>
+        <option value="2">寅時（03:00–04:59）</option>
+        <option value="3">卯時（05:00–06:59）</option>
+        <option value="4">辰時（07:00–08:59）</option>
+        <option value="5">巳時（09:00–10:59）</option>
+        <option value="6">午時（11:00–12:59）</option>
+        <option value="7">未時（13:00–14:59）</option>
+        <option value="8">申時（15:00–16:59）</option>
+        <option value="9">酉時（17:00–18:59）</option>
+        <option value="10">戌時（19:00–20:59）</option>
+        <option value="11">亥時（21:00–22:59）</option>
+      </select>
+      <button class="go" id="go">開始分析</button>
+      <p class="err" id="err"></p>
+    </div>
+  </div>
+</div>
+
+<!-- 結果頁 -->
+<div id="v-result" class="view">
+  <div class="app-bar">URBAN 命理</div>
+  <div class="content">
+    <div class="card info">
+      <div>生日：<strong id="i-dob"></strong>　時辰：<strong id="i-sc"></strong></div>
+      <button class="back" id="back">返回修改</button>
+    </div>
+
+    <div class="navigation" id="tabs">
+      <a data-tab="zodiac" class="current">星座占卜</a>
+      <a data-tab="numerology">生命靈數</a>
+      <a data-tab="tarot">生命塔羅</a>
+      <a data-tab="bazi">八字</a>
+    </div>
+
+    <section id="zodiac" class="panel on"></section>
+
+    <section id="numerology" class="panel">
+      <div class="card">
+        <h3>計算結果</h3>
+        <p>先天數（生日數字）：<strong id="raw-number"></strong></p>
+        <p>後天總和（全數相加）：<strong id="sum-number"></strong></p>
+        <p>主命數（最終能量）：<strong id="lp-number" class="red"></strong></p>
+      </div>
+      <div class="card">
+        <h3>九宮格命盤</h3>
+        <div class="lo-shu-grid-container">
+          <svg id="connection-svg" class="connection-layer"></svg>
+          <div id="lo-shu-grid" class="lo-shu-grid">
+            <div id="cell-1" class="grid-cell">1<div class="symbol-area"></div></div>
+            <div id="cell-4" class="grid-cell">4<div class="symbol-area"></div></div>
+            <div id="cell-7" class="grid-cell">7<div class="symbol-area"></div></div>
+            <div id="cell-2" class="grid-cell">2<div class="symbol-area"></div></div>
+            <div id="cell-5" class="grid-cell">5<div class="symbol-area"></div></div>
+            <div id="cell-8" class="grid-cell">8<div class="symbol-area"></div></div>
+            <div id="cell-3" class="grid-cell">3<div class="symbol-area"></div></div>
+            <div id="cell-6" class="grid-cell">6<div class="symbol-area"></div></div>
+            <div id="cell-9" class="grid-cell">9<div class="symbol-area"></div></div>
+          </div>
+        </div>
+        <p class="legend"><span class="lg o"></span>先天數　<span class="lg t"></span>後天數　<span class="lg s"></span>主命數</p>
+      </div>
+      <div id="ls-detail"></div>
+
+      <h2 class="sec">流年</h2>
+      <div class="card">
+        <h3>流年資訊</h3>
+        <p>流年年份：<strong id="ln-year"></strong></p>
+        <div class="liu-nian-data-container">
+          <div class="data-item"><span style="color:#dc3545">國運</span><strong id="ln-guo"></strong></div>
+          <div class="data-item"><span style="color:#007bff">流年</span><strong id="ln-liu"></strong></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>流年課題金字塔</h3>
+        <div class="pyramid-container">
+          <svg id="pyramid-svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMin meet">
+            <polyline class="pyramid-line" points="50,0 100,100 0,100 50,0" />
+            <line class="pyramid-line" x1="16.7" y1="66.6" x2="83.3" y2="66.6" />
+            <line class="pyramid-line" x1="33.3" y1="33.3" x2="66.7" y2="33.3" />
+            <line class="pyramid-center-line" x1="50" y1="33.3" x2="50" y2="100" />
+          </svg>
+          <div id="pyramid-numbers" class="pyramid-number-container"></div>
+        </div>
+        <div id="dob-sequence" class="dob-sequence-container"></div>
+      </div>
+      <div class="card">
+        <h3>流年解析</h3>
+        <div class="result-number"><small>流年數字</small><span id="ln-num"></span></div>
+        <h4>年度主題</h4><p id="ln-theme"></p>
+        <h4>建議</h4><p id="ln-advice"></p>
+      </div>
+    </section>
+
+    <section id="tarot" class="panel">
+      <div class="card">
+        <h3>塔羅六張主牌</h3>
+        <div class="tarot-grid" id="tarot-grid"></div>
+        <div id="career-tarot"></div>
+      </div>
+      <div id="tarot-detail"></div>
+    </section>
+
+    <section id="bazi" class="panel"></section>
+  </div>
+</div>
+
 <footer>僅供娛樂參考，不構成任何決策建議。</footer>
 <script src="data.js"></script>
 <script src="app.js"></script>

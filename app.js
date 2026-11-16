@@ -158,7 +158,10 @@ function renderTarot(){
   const labels={1:"1. 個性塔羅",2:"2. 愛情塔羅",3:"3. 靈魂塔羅",4:"4. 潛能塔羅",5:"5. 配牌 1",6:"6. 配牌 2"};
   $("#tarot-grid").innerHTML=[1,2,3,4,5,6].map(i=>
     `<div class="tarot-card-display"><strong>${labels[i]}</strong><span class="number">${c[i]}</span><span class="name">${key(c[i])}</span></div>`).join("");
-  $("#career-tarot").innerHTML=`<strong>事業塔羅：</strong><span class="number">${c.career}</span><span class="name">${key(c.career)}</span>`;
+  // 事業塔羅：主命數 n 對應 n、n+9、n+18（不超過 22）
+  const careerNums=[c.career,c.career+9,c.career+18].filter(n=>n<=22);
+  $("#career-tarot").innerHTML=`<strong>事業塔羅</strong><div class="career-row">${careerNums.map(n=>
+    `<div class="cc"><span class="number">${n}</span><span class="name">${key(n)}</span></div>`).join("")}</div>`;
 
   const names=[c[1],c[2],c[3],c[4],c[5],c[6],c.career].map(key);
   const block=(title,n,body)=>`<div class="card analysis"><h3>${title}</h3><p><strong>卡號 ${n}：${nm(n)}</strong></p>${body}</div>`;

@@ -43,7 +43,7 @@ function shishen(me,g){            // 以日主 me 看天干 g 的十神
 function kongwang(idx){const x=Math.floor(idx/10);return[mod(10-2*x,12),mod(11-2*x,12)]}
 
 // ===== 神煞 =====
-function shensha(P){               // P=[年,月,日,時] 每項 [干,支]
+function shensha(P,gender){               // P=[年,月,日,時] 每項 [干,支]
   const yG=P[0][0],yZ=P[0][1],mZ=P[1][1],dG=P[2][0],dZ=P[2][1];
   const g4=z=>z%4;
   const tianyi=[[1,7],[0,8],[11,9],[11,9],[1,7],[0,8],[1,7],[2,6],[5,3],[5,3]];
@@ -62,6 +62,8 @@ function shensha(P){               // P=[年,月,日,時] 每項 [干,支]
     ["學堂",[xuetang]],
     ["紅豔",[[6,6,2,7,4,4,10,9,0,8][dG]]],
     ["龍德",[mod(yZ+7,12)]],
+    // 元辰（大耗）：陽男陰女＝年支對沖再往後一位；陰男陽女＝對沖再往前一位；需要性別
+    ["元辰",gender?[mod(yZ+6+(((yG%2===0)===(gender==="男"))?1:-1),12)]:[]],
     ["金輿",[[4,5,7,8,7,8,10,11,1,2][dG]]],
     ["流霞",[[9,10,7,8,5,6,4,3,11,2][dG]]],
     ["災煞",[[6,3,0,9][g4(yZ)],[6,3,0,9][g4(dZ)]]],
@@ -122,11 +124,11 @@ function baziHtml(S,hz){
   const order=[3,2,1,0];                                // 時、日、月、年
   const names=["年柱","月柱","日柱","時柱"];
   const row=(label,fn)=>`<tr><th>${label}</th>${order.map(i=>`<td>${fn(i)}</td>`).join("")}</tr>`;
-  const ss=shensha(P);
+  const ss=shensha(P,S.gender);
   const kw=i=>{const idx=sexa(P[i][0],P[i][1]);return kongwang(idx).map(z=>ZHI[z]).join("")};
   const table=`<table class="mp">
     <tr class="hd"><th>日期</th>${order.map(i=>`<th>${names[i]}</th>`).join("")}</tr>
-    ${row("主星",i=>i===2?"<span class='red'>日主</span>":shishen(me,P[i][0]))}
+    ${row("主星",i=>i===2?`<span class='red'>${S.gender==="男"?"元男":S.gender==="女"?"元女":"日主"}</span>`:shishen(me,P[i][0]))}
     ${row("天干",i=>`<b class="big ${WXC[GAN_WX[P[i][0]]]}">${GAN[P[i][0]]}</b>`)}
     ${row("地支",i=>`<b class="big ${WXC[ZHI_WX[P[i][1]]]}">${ZHI[P[i][1]]}</b>`)}
     ${row("藏干",i=>HIDDEN[P[i][1]].map(g=>`${GAN[g]} ${GAN_WX[g]}`).join("<br>"))}
@@ -195,7 +197,7 @@ function baziHtml(S,hz){
     const items=posS[n].sort((x,y)=>x.i-y.i).map(o=>
       `<div class="occ"><b>${POS_MEANING[o.i].name}${o.t}（${GAN[o.g]}）</b><p><small>${o.t==="天干"?"外顯":"內在"}</small>　${SS_POS[n][o.i]}</p></div>`).join("");
     return`<div class="ss"><div class="ss-h"><b>${n}</b><span class="tag ${c===0?"no":c>=3?"hi":""}">${lvl}</span></div>
-      <p>${c===0?t.none:(c>=3?t.core+t.many:t.core)}</p>${items}</div>`;
+      <p>${c===0?t.none:(c>=3?t.core+t.many:t.core)}</p>${S.gender&&GENDER_NOTE[n]?`<p class="gn">${GENDER_NOTE[n][S.gender]}</p>`:""}${items}</div>`;
   }).join("");
   // ===== 神煞解析（依所在柱位）=====
   const shaPos={};

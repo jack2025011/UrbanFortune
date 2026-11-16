@@ -233,8 +233,8 @@ function renderLiuNian(){
       ${box("今年度流年",Y,n0,`${fmtD(start)}<br>～ ${fmtD(dayBefore(nextStart))}`)}
       ${box("明年度流年",Y+1,n1,`${fmtD(nextStart)}<br>起開始`)}
     </div>${early}
-    <p><small>流年以每年生日為換年點。</small></p></div>
-    <div class="card analysis"><h3>流年解析</h3>${ana("今年度",Y,n0)}${ana("明年度",Y+1,n1)}</div>`;
+    <div class="analysis">${ana("今年度",Y,n0)}${ana("明年度",Y+1,n1)}</div>
+    <p><small>流年以每年生日為換年點。</small></p></div>`;
 }
 
 // ========== 生命塔羅 ==========

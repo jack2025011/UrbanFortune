@@ -26,7 +26,7 @@ $("#go").onclick=()=>{
   if(r.error)return msg(r.error);
   msg("");S=r;
   $("#i-name").textContent=S.name;$("#i-name-row").style.display=S.name?"":"none";
-  $("#i-dob").textContent=`${S.digits.slice(0,4)} / ${S.mm} / ${S.dd}`;
+  $("#i-dob").textContent=`${S.digits.slice(0,4)}/${S.mm}/${S.dd}`;
   $("#i-sc").textContent=S.hour===null?"未填":SHICHEN[S.hour];
   renderAll();
   $("#v-input").classList.remove("on");$("#v-result").classList.add("on");

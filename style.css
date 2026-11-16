@@ -145,3 +145,14 @@ footer{text-align:center;color:var(--sub);font-size:12px;padding:26px 16px 36px;
 .hi-main span{font-size:13px;color:var(--sub)}
 .del{background:transparent;border:0;color:var(--sub);font-size:18px;padding:6px 10px;cursor:pointer}
 .empty{text-align:center;color:var(--sub);margin:14px 0 0}
+.info>div{white-space:nowrap;font-size:14px;min-width:0}
+.info .back{white-space:nowrap;padding:6px 12px;font-size:13px;flex-shrink:0}
+.strength{display:flex;align-items:center;gap:14px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.07);font-size:16px}
+.st-l{color:var(--sub);width:5.2em;flex-shrink:0;font-size:14px}
+.st-t{display:flex;gap:12px}
+.st-v.s{color:var(--red)}.st-v.w{color:#7aa8ff}
+.mp2 td:nth-child(3){text-align:center;font-weight:700}
+.mp2 th,.mp2 td{padding:9px 4px}
+.mp2 th{width:auto}
+.mp2 td.ss-c{white-space:nowrap;font-size:14px;letter-spacing:0}
+.mp2 th:nth-child(1){width:14%}.mp2 th:nth-child(2){width:14%}.mp2 th:nth-child(3){width:14%}

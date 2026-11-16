@@ -163,6 +163,7 @@ function baziHtml(S,hz){
   const lack=Object.keys(cnt).filter(k=>!cnt[k]);
   const info=`<div class="card"><h3>基本資料</h3>
     <p>西曆：${S.y}年${S.mm}月${S.dd}日　${SHICHEN[hz]}</p>
+    <p>農曆：${S.lunar.text}　${SHICHEN[hz]}　屬${S.lunar.shengxiao}</p>
     <p>節氣：${fmtTerm(R.jie.name,R.jie.jd)}　${fmtTerm(R.qi.name,R.qi.jd)}</p>
     <p>人元司令：${R.renyuan.jie}後${R.renyuan.days}日　${R.renyuan.stem}${GAN_WX[GAN.indexOf(R.renyuan.stem)]}用事</p>
     <p>命宮：${gz(R.ming)}　胎元：${gz(R.taiyuan)}</p>

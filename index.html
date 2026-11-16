@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>URBAN 命理</title>
-<link rel="stylesheet" href="style.css?v=202611160858">
+<link rel="stylesheet" href="style.css?v=202611160905">
 </head>
 <body>
 
@@ -38,7 +38,12 @@
         <option value="11">亥時（21:00–22:59）</option>
       </select>
       <button class="go" id="go">開始分析</button>
+      <div class="row2">
+        <button class="ghost" id="save" type="button">儲存</button>
+        <button class="ghost" id="hist" type="button">歷史</button>
+      </div>
       <p class="err" id="err"></p>
+      <div id="hist-list" class="hidden"></div>
     </div>
   </div>
 </div>
@@ -117,8 +122,8 @@
 </div>
 
 <footer>僅供娛樂參考，不構成任何決策建議。</footer>
-<script src="data.js?v=202611160858"></script>
-<script src="bazi.js?v=202611160858"></script>
-<script src="app.js?v=202611160858"></script>
+<script src="data.js?v=202611160905"></script>
+<script src="bazi.js?v=202611160905"></script>
+<script src="app.js?v=202611160905"></script>
 </body>
 </html>

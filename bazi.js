@@ -150,6 +150,36 @@ function baziHtml(S,hz){
     <p>日主：<strong>${GAN[me]}（${GAN_WX[me]}）</strong></p>
     <p>五行：${Object.entries(cnt).map(([k,v])=>`${k}${v}`).join("　")}　${lack.length?"缺："+lack.join("、"):"五行俱全"}</p>
   </div>`;
-  return`<div class="card"><h3>命盤</h3>${table}</div>${info}
+  // ===== 十神統計（天干不含日主 + 全部藏干）=====
+  const names4=["年","月","日","時"],cntS={},posS={};
+  SHISHEN_ORDER.forEach(n=>{cntS[n]=0;posS[n]=[]});
+  P.forEach(([g,z],i)=>{
+    if(i!==2){const n=shishen(me,g);cntS[n]++;posS[n].push(`${names4[i]}柱天干`)}
+    HIDDEN[z].forEach(h=>{const n=shishen(me,h);cntS[n]++;posS[n].push(`${names4[i]}柱藏干（${GAN[h]}）`)});
+  });
+  // 旺相休囚死：依月令五行
+  const mw=[2,3].includes(P[1][1])?"木":[5,6].includes(P[1][1])?"火":[8,9].includes(P[1][1])?"金":[11,0].includes(P[1][1])?"水":"土";
+  const WXN=["木","火","土","金","水"],mi=WXN.indexOf(mw);
+  const status={};status[WXN[mi]]="旺";status[WXN[(mi+1)%5]]="相";status[WXN[(mi+4)%5]]="休";status[WXN[(mi+3)%5]]="囚";status[WXN[(mi+2)%5]]="死";
+  const wxShi={木:[],火:[],土:[],金:[],水:[]};
+  // 十神所屬五行：以日主五行推算
+  const meWx=WX_IDX[GAN_WX[me]];
+  const shiWx={比肩:0,劫財:0,食神:1,傷官:1,偏財:2,正財:2,七殺:3,正官:3,偏印:4,正印:4};
+  SHISHEN_ORDER.forEach(n=>wxShi[WXN[mod(meWx+shiWx[n],5)]].push(`${n}${cntS[n]}`));
+  const wxRows=WXN.map(w=>`<tr><th class="${WXC[w]}">${w}</th><td>${status[w]}</td><td>${wxShi[w].join("　")}</td></tr>`).join("");
+  const wxCard=`<div class="card"><h3>五行與十神</h3>
+    <table class="mp2"><tr class="hd"><th>五行</th><th>月令</th><th>十神數量</th></tr>${wxRows}</table>
+    <p><small>以月支「${ZHI[P[1][1]]}」為當令（${mw}旺）；十神數量＝天干（不含日主）＋所有藏干。</small></p></div>`;
+  // ===== 十神解析 =====
+  const analysis=SHISHEN_ORDER.map(n=>{
+    const c=cntS[n],t=SHISHEN_TEXT[n];
+    const lvl=c===0?"無":c===1?"1個":c===2?"2個・適中":`${c}個・偏多`;
+    const body=c===0?t.none:(c>=3?t.core+t.many:t.core);
+    return`<div class="ss"><div class="ss-h"><b>${n}</b><span class="tag ${c===0?"no":c>=3?"hi":""}">${lvl}</span></div>
+      <p>${body}</p>${c?`<p class="pos">位置：${posS[n].join("、")}</p>`:""}</div>`;
+  }).join("");
+  const anaCard=`<div class="card"><h3>十神解析</h3>${analysis}
+    <p class="note">以上為十神的一般性說明，依日主「${GAN[me]}${GAN_WX[me]}」計算數量；實際強弱還要看月令、合沖與大運，僅供參考。</p></div>`;
+  return`<div class="card"><h3>命盤</h3>${table}</div>${info}${wxCard}${anaCard}
     <p class="note">節氣由太陽位置推算，誤差約十分鐘內；出生在節氣交接當天請以萬年曆為準。時間取該時辰的起始整點。</p>`;
 }

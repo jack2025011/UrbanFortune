@@ -218,23 +218,21 @@ function birthdayIn(y){return new Date(y,S.m-1,(S.m===2&&S.d===29&&!isLeap(y))?2
 const fmtD=d=>`${d.getFullYear()}/${String(d.getMonth()+1).padStart(2,"0")}/${String(d.getDate()).padStart(2,"0")}`;
 const dayBefore=d=>new Date(d.getFullYear(),d.getMonth(),d.getDate()-1);
 function renderLiuNian(){
+  // 以「今天」為基準：左邊＝目前正在走的流年，右邊＝下一個流年（以生日換年）
   const now=new Date(),Y=now.getFullYear();
-  const start=birthdayIn(Y),nextStart=birthdayIn(Y+1);
-  const n0=liunianNum(Y),n1=liunianNum(Y+1);
-  let early="";
-  if(now<start){
-    const pn=liunianNum(Y-1);
-    early=`<p class="note">今年的生日還沒到，目前仍屬 ${Y-1} 年的流年（${pn}），到 ${fmtD(dayBefore(start))} 為止。</p>`;
-  }
+  const Yc=now>=birthdayIn(Y)?Y:Y-1;
+  const curStart=birthdayIn(Yc),nextStart=birthdayIn(Yc+1);
+  const n0=liunianNum(Yc),n1=liunianNum(Yc+1);
   const box=(t,y,n,period)=>`<div class="ln-box"><div class="ln-t">${t}</div><div class="ln-y">${y} 年</div><div class="ln-n">${n}</div><div class="ln-p">${period}</div></div>`;
   const ana=(t,y,n)=>{const a=LIU_NIAN_ANALYSIS[n];return`<h4>${t}（${y}）流年 ${n}</h4><p><b>年度主題：</b>${a.theme}</p><p><b>建議：</b>${a.advice}</p>`};
   $("#liunian").innerHTML=`<div class="card"><h3>流年</h3>
     <div class="ln-grid">
-      ${box("今年度流年",Y,n0,`${fmtD(start)}<br>～ ${fmtD(dayBefore(nextStart))}`)}
-      ${box("明年度流年",Y+1,n1,`${fmtD(nextStart)}<br>起開始`)}
-    </div>${early}
-    <div class="analysis">${ana("今年度",Y,n0)}${ana("明年度",Y+1,n1)}</div>
-    <p><small>流年以每年生日為換年點。</small></p></div>`;
+      ${box("目前流年",Yc,n0,`${fmtD(curStart)}<br>～ ${fmtD(dayBefore(nextStart))}`)}
+      ${box("下一個流年",Yc+1,n1,`${fmtD(nextStart)}<br>起開始`)}
+    </div>
+    <p><small>流年以每年生日為換年點，並以今天的日期為基準。</small></p>
+    <button class="toggle in-card" data-lock="1" data-target="ln-detail" data-label="流年解析">查看流年解析</button>
+    <div id="ln-detail" class="hidden analysis">${ana("目前流年",Yc,n0)}${ana("下一個流年",Yc+1,n1)}</div></div>`;
 }
 
 // ========== 生命塔羅 ==========

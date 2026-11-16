@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>URBAN 命理</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>URBAN <span>FORTUNE</span></h1>
+  <p>星座・塔羅・生命靈數・八字</p>
+</header>
+<nav id="tabs">
+  <button data-tab="zodiac" class="on">星座占卜</button>
+  <button data-tab="tarot">生命塔羅</button>
+  <button data-tab="numerology">生命靈數</button>
+  <button data-tab="bazi">八字</button>
+</nav>
+<main>
+  <section id="zodiac" class="panel on">
+    <label>出生日期 <input type="date" id="z-date"></label>
+    <button class="go" id="z-go">看今日運勢</button>
+    <div class="result" id="z-out"></div>
+  </section>
+  <section id="tarot" class="panel">
+    <p class="hint">心裡想著一個問題，按下抽牌（過去・現在・未來）。</p>
+    <button class="go" id="t-go">抽三張牌</button>
+    <div class="cards" id="t-out"></div>
+  </section>
+  <section id="numerology" class="panel">
+    <label>出生日期 <input type="date" id="n-date"></label>
+    <button class="go" id="n-go">計算生命靈數</button>
+    <div class="result" id="n-out"></div>
+  </section>
+  <section id="bazi" class="panel">
+    <label>出生日期 <input type="date" id="b-date"></label>
+    <label>出生時間 <input type="time" id="b-time" value="12:00"></label>
+    <button class="go" id="b-go">排八字</button>
+    <div class="result" id="b-out"></div>
+  </section>
+</main>
+<footer>僅供娛樂參考，不構成任何決策建議。</footer>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

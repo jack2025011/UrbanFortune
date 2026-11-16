@@ -73,3 +73,6 @@ small{color:var(--sub)}
 .pillars small{display:block}.pillars b{font-size:1.6rem;color:var(--text)}
 .need{text-align:center;padding:30px 0;font-size:18px;color:var(--red);font-weight:600}
 footer{text-align:center;color:var(--sub);font-size:.8rem;padding:24px}
+.hidden{display:none}
+.toggle{display:block;width:100%;margin:0 0 15px;padding:13px;background:#fff;color:var(--brand);border:2px solid var(--brand);border-radius:8px;font-size:16px;font-weight:600;cursor:pointer}
+.toggle.open{background:var(--brand);color:#fff}

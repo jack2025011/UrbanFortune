@@ -83,35 +83,19 @@
         </div>
         <p class="legend"><span class="lg o"></span>先天數　<span class="lg t"></span>後天數　<span class="lg s"></span>主命數</p>
       </div>
-      <div id="ls-detail"></div>
+      <button class="toggle" data-target="ls-detail" data-label="詳細解析">查看詳細解析</button>
+      <div id="ls-detail" class="hidden"></div>
 
       <h2 class="sec">流年</h2>
-      <div class="card">
-        <h3>流年資訊</h3>
-        <p>流年年份：<strong id="ln-year"></strong></p>
-        <div class="liu-nian-data-container">
-          <div class="data-item"><span style="color:#dc3545">國運</span><strong id="ln-guo"></strong></div>
-          <div class="data-item"><span style="color:#007bff">流年</span><strong id="ln-liu"></strong></div>
+      <button class="toggle" data-target="ln-detail" data-label="流年解析">查看流年解析</button>
+      <div id="ln-detail" class="hidden">
+        <div class="card">
+          <h3>流年解析</h3>
+          <p>流年年份：<strong id="ln-year"></strong></p>
+          <div class="result-number"><small>流年數字</small><span id="ln-num"></span></div>
+          <h4>年度主題</h4><p id="ln-theme"></p>
+          <h4>建議</h4><p id="ln-advice"></p>
         </div>
-      </div>
-      <div class="card">
-        <h3>流年課題金字塔</h3>
-        <div class="pyramid-container">
-          <svg id="pyramid-svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMin meet">
-            <polyline class="pyramid-line" points="50,0 100,100 0,100 50,0" />
-            <line class="pyramid-line" x1="16.7" y1="66.6" x2="83.3" y2="66.6" />
-            <line class="pyramid-line" x1="33.3" y1="33.3" x2="66.7" y2="33.3" />
-            <line class="pyramid-center-line" x1="50" y1="33.3" x2="50" y2="100" />
-          </svg>
-          <div id="pyramid-numbers" class="pyramid-number-container"></div>
-        </div>
-        <div id="dob-sequence" class="dob-sequence-container"></div>
-      </div>
-      <div class="card">
-        <h3>流年解析</h3>
-        <div class="result-number"><small>流年數字</small><span id="ln-num"></span></div>
-        <h4>年度主題</h4><p id="ln-theme"></p>
-        <h4>建議</h4><p id="ln-advice"></p>
       </div>
     </section>
 
@@ -121,7 +105,8 @@
         <div class="tarot-grid" id="tarot-grid"></div>
         <div id="career-tarot"></div>
       </div>
-      <div id="tarot-detail"></div>
+      <button class="toggle" data-target="tarot-detail" data-label="詳細解析">查看詳細解析</button>
+      <div id="tarot-detail" class="hidden"></div>
     </section>
 
     <section id="bazi" class="panel"></section>

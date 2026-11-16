@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>URBAN 命理</title>
-<link rel="stylesheet" href="style.css?v=202611160911">
+<link rel="stylesheet" href="style.css?v=202611160922">
 </head>
 <body>
 
@@ -91,20 +91,9 @@
         </div>
         <p class="legend"><span class="lg o"></span>先天數　<span class="lg t"></span>後天數　<span class="lg s"></span>主命數</p>
       </div>
-      <button class="toggle" data-target="ls-detail" data-label="詳細解析">查看詳細解析</button>
+      <div id="liunian"></div>
+      <button class="toggle" data-lock="1" data-target="ls-detail" data-label="詳細解析">查看詳細解析</button>
       <div id="ls-detail" class="hidden"></div>
-
-      <h2 class="sec">流年</h2>
-      <button class="toggle" data-target="ln-detail" data-label="流年解析">查看流年解析</button>
-      <div id="ln-detail" class="hidden">
-        <div class="card">
-          <h3>流年解析</h3>
-          <p>流年年份：<strong id="ln-year"></strong></p>
-          <div class="result-number"><small>流年數字</small><span id="ln-num"></span></div>
-          <h4>年度主題</h4><p id="ln-theme"></p>
-          <h4>建議</h4><p id="ln-advice"></p>
-        </div>
-      </div>
     </section>
 
     <section id="tarot" class="panel">
@@ -113,7 +102,7 @@
         <div class="tarot-grid" id="tarot-grid"></div>
         <div id="career-tarot"></div>
       </div>
-      <button class="toggle" data-target="tarot-detail" data-label="詳細解析">查看詳細解析</button>
+      <button class="toggle" data-lock="1" data-target="tarot-detail" data-label="詳細解析">查看詳細解析</button>
       <div id="tarot-detail" class="hidden"></div>
     </section>
 
@@ -121,9 +110,18 @@
   </div>
 </div>
 
+<div id="lock" class="lock" hidden>
+  <div class="lock-box">
+    <h3>🔒 請輸入密碼</h3>
+    <input id="lock-pw" type="password" autocomplete="off" placeholder="密碼">
+    <p class="err" id="lock-err"></p>
+    <div class="row2"><button class="ghost" id="lock-cancel" type="button">取消</button><button class="go lock-ok" id="lock-ok" type="button">解鎖</button></div>
+  </div>
+</div>
+
 <footer>僅供娛樂參考，不構成任何決策建議。</footer>
-<script src="data.js?v=202611160911"></script>
-<script src="bazi.js?v=202611160911"></script>
-<script src="app.js?v=202611160911"></script>
+<script src="data.js?v=202611160922"></script>
+<script src="bazi.js?v=202611160922"></script>
+<script src="app.js?v=202611160922"></script>
 </body>
 </html>

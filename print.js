@@ -60,6 +60,14 @@ function buildSheet(){
   return`${head}<div class="sh-cols"><div class="sh-col">${bazi}${baziExtra}${ln}</div><div class="sh-col">${ziwei}${ls}${tarot}</div></div>
     <div class="sh-foot">僅供娛樂參考，不構成任何決策建議　・　URBAN 命理</div>`;
 }
+// 內容比紙張還高時，逐級收緊行距（神煞直排最多可到 11 行）
+function fitHeight(){
+  const sh=document.getElementById("po-sheet");sh.classList.remove("tight1","tight2");
+  const limit=1085;                                       // 紙高 1123 扣掉頁尾
+  const bottom=()=>Math.max(...[...sh.querySelectorAll(".sh-col")].map(c=>c.offsetTop+c.offsetHeight));
+  if(bottom()>limit){sh.classList.add("tight1");if(bottom()>limit)sh.classList.add("tight2")}
+  return bottom();
+}
 function fitSheet(){
   const s=Math.min(1,(window.innerWidth-24)/794),sh=document.getElementById("po-sheet"),box=document.getElementById("po-box");
   sh.style.transform=`scale(${s})`;box.style.width=794*s+"px";box.style.height=1123*s+"px";
@@ -67,6 +75,7 @@ function fitSheet(){
 function openPrint(){
   if(!S)return;
   document.getElementById("po-sheet").innerHTML=buildSheet();
+  fitHeight();
   document.getElementById("po").hidden=false;document.body.classList.add("po-open");
   fitSheet();document.querySelector(".po-scroll").scrollTop=0;
 }

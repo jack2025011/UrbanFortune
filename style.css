@@ -352,3 +352,6 @@ body.unlocked .toggle[data-lock]::before{content:"✦ "}
 .zf-name em{font-style:normal;margin-left:2px;color:#a02020}
 .zc-center .zcc-sz{color:var(--gold);letter-spacing:.08em;margin-top:3px;font-size:12px}
 .zc-center{font-size:11.5px;line-height:1.55}
+.sn{display:block}
+.sheet .sn{display:inline-block;margin:0 2px}
+.sheet .mp td .sn{font-size:9.5px}

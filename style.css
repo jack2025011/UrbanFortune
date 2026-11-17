@@ -353,5 +353,16 @@ body.unlocked .toggle[data-lock]::before{content:"✦ "}
 .zc-center .zcc-sz{color:var(--gold);letter-spacing:.08em;margin-top:3px;font-size:12px}
 .zc-center{font-size:11.5px;line-height:1.55}
 .sn{display:block}
-.sheet .sn{display:inline-block;margin:0 2px}
-.sheet .mp td .sn{font-size:9.5px}
+.sheet .mp td .sn{display:block;font-size:10px;line-height:1.32}
+/* 內容太高時自動收緊（由 print.js 依實際高度加上 tight1／tight2） */
+.sheet.tight1 .mp th,.sheet.tight1 .mp td{padding:2px 1px}
+.sheet.tight1 .mp .big{font-size:19px}
+.sheet.tight1 .mp td .sn{font-size:9.5px;line-height:1.24}
+.sheet.tight1 .sh-col{gap:7px}
+.sheet.tight1 .sh-t{margin-bottom:4px}
+.sheet.tight2 .mp td .sn{font-size:9px;line-height:1.16}
+.sheet.tight2 .mp th,.sheet.tight2 .mp td{padding:1px 1px;line-height:1.3}
+.sheet.tight2 .mp .big{font-size:17px}
+.sheet.tight2 .sh-col{gap:5px}
+.sheet.tight2 .sh-lines,.sheet.tight2 .mp2{font-size:9.5px}
+.sheet.tight2 .mp2 th,.sheet.tight2 .mp2 td{padding:2px 4px}

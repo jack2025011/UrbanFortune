@@ -49,6 +49,8 @@ $("#save").onclick=()=>{
   let list=loadHist();
   const i=list.findIndex(x=>x.name===item.name&&x.dob===item.dob&&x.hour===item.hour&&(x.gender||null)===item.gender);
   if(i>=0)list.splice(i,1);                      // 相同資料就更新到最前面
+  else{const limit=[1,5,Infinity,Infinity][planLevel()];
+    if(list.length>=limit)return msg(`目前方案最多儲存 ${limit} 筆，升級「入門 68」可儲存 5 筆、「進階 168」不限筆數`)}
   list.unshift(item);
   if(!saveHist(list))return msg("這個瀏覽器無法儲存（可能是無痕模式）");
   msg("已儲存",true);
@@ -111,7 +113,7 @@ async function tryUnlock(){
   try{ok=(await sha256(PW_SALT+$("#lock-pw").value))===PW_HASH}catch(e){$("#lock-err").textContent="此瀏覽器不支援解鎖，請改用 Safari 或 Chrome";return}
   if(!ok){$("#lock-err").textContent="密碼錯誤";return}
   unlocked=true;try{sessionStorage.setItem("uf.unlock","1")}catch(e){}
-  applyUnlock();const b=pending;closeLock();if(typeof b==="function")b();else if(b)doToggle(b);
+  applyUnlock();const b=pending;closeLock();if(typeof adminChanged==="function")adminChanged();if(typeof b==="function")b();else if(b)doToggle(b);
 }
 document.addEventListener("click",e=>{
   const b=e.target.closest(".toggle");if(!b)return;
@@ -128,9 +130,10 @@ function renderZiwei(){
       <p style="text-align:center"><small>紫微斗數需要出生時辰，請按上方「返回修改」補填。</small></p></div>`;
     return;
   }
+  if(!entitled(2)){$("#ziwei").innerHTML=gateChartTeaser(2,"紫微斗數命盤與解析",["命盤：十二宮、主星與輔星、四化","大限與流年小限","紫微解析"]);return}
   $("#ziwei").innerHTML=ziweiHtml(S);
 }
-function renderAll(){BZ_CUR=null;Z_CUR=null;renderNumerology();renderTarot();renderBazi();renderZiwei()}
+function renderAll(){BZ_CUR=null;Z_CUR=null;renderNumerology();renderTarot();renderBazi();renderZiwei();if(typeof updateGateButtons==="function")updateGateButtons()}
 
 // ========== 生命靈數 ==========
 const digitSum=s=>String(s).split("").reduce((a,b)=>a+ +b,0);
@@ -175,7 +178,7 @@ function renderNumerology(){
     if(m&&p.every(n=>LS.marked.has(n)))
       conns+=`<li><strong>✅ ${p.join("-")} 連線 (${m.name})：</strong>${m.trait}</li>`;
   });
-  $("#ls-detail").innerHTML=`
+  const lsDetailHtml=`
   <div class="card analysis"><h3>🥇 主命數 解析</h3>
     <div class="result-number"><small>主命數</small>${LS.lifePath}</div>
     <p>${lifePathMeanings[LS.lifePath]||""}</p></div>
@@ -186,6 +189,7 @@ function renderNumerology(){
   <div class="card"><h3>🔗 九宮連線（天賦連線）解析</h3>
     <p>以下是命盤中擁有的天賦連線。連線完整代表天生擁有該特質的能量組。</p>
     <ul class="connection-list">${conns||"<li>九宮格未形成任何一條完整的連線。</li>"}</ul></div>`;
+  $("#ls-gate").innerHTML=gateBlock(1,{id:"ls-detail",toggle:"詳細解析",label:"生命靈數詳細解析",sections:["主命數解析","先天數與後天數","九宮連線（天賦連線）解析"],html:lsDetailHtml});
 
   renderLiuNian();
 }
@@ -225,15 +229,14 @@ function renderLiuNian(){
   const n0=liunianNum(Yc),n1=liunianNum(Yc+1);
   LN_CUR={Yc,n0,n1};
   const box=(t,y,n,period)=>`<div class="ln-box"><div class="ln-t">${t}</div><div class="ln-y">${y} 年</div><div class="ln-n">${n}</div><div class="ln-p">${period}</div></div>`;
-  const ana=(t,y,n)=>{const a=LIU_NIAN_ANALYSIS[n];return`<h4>${t}（${y}）流年 ${n}</h4><p><b>年度主題：</b>${a.theme}</p><p><b>建議：</b>${a.advice}</p>`};
+  const detail=(label,y,n)=>gateBlock(1,{label:`${label}詳細解析`,sections:LN_SECTIONS,html:liunianDetailHtml(label,y,n)});
   $("#liunian").innerHTML=`<div class="card"><h3>流年</h3>
     <div class="ln-grid">
       ${box("目前流年",Yc,n0,`${fmtD(curStart)}<br>～ ${fmtD(dayBefore(nextStart))}`)}
       ${box("下一個流年",Yc+1,n1,`${fmtD(nextStart)}<br>起開始`)}
     </div>
     <p><small>流年以每年生日為換年點，並以今天的日期為基準。</small></p>
-    <button class="toggle in-card" data-lock="1" data-target="ln-detail" data-label="流年解析">查看流年解析</button>
-    <div id="ln-detail" class="hidden analysis">${ana("目前流年",Yc,n0)}${ana("下一個流年",Yc+1,n1)}</div></div>`;
+    ${detail("目前流年",Yc,n0)}${detail("下一個流年",Yc+1,n1)}</div>`;
 }
 
 // ========== 生命塔羅 ==========
@@ -274,7 +277,7 @@ function renderTarot(){
   for(const k in COMBINATION_DATA)if(k.includes("+")&&k.split("+").every(p=>uniq.includes(p)))
     combo+=`<p><strong>【組合：${k}】</strong>：${COMBINATION_DATA[k]}</p>`;
   if(combo)html+=`<div class="card analysis"><h3>✨ 特殊牌組合</h3>${combo}</div>`;
-  $("#tarot-detail").innerHTML=html;
+  $("#tarot-gate").innerHTML=gateBlock(1,{id:"tarot-detail",toggle:"詳細解析",label:"生命塔羅詳細解析",sections:["個性、靈魂、潛能與配牌","愛情塔羅：風格與弱點","事業塔羅：方向、禁忌與適合職務","特殊牌組合"],html});
 }
 
 // ========== 八字（計算在 bazi.js）==========
@@ -286,3 +289,4 @@ function renderBazi(){
   }
   $("#bazi").innerHTML=baziHtml(S,S.hour);
 }
+if(typeof adminChanged==="function")adminChanged();   // 重新整理後仍在管理者模式時，顯示預覽列

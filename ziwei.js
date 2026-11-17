@@ -160,7 +160,7 @@ function ziweiHtml(S){
   const note=S.gender?"":`<p class="note">填寫性別後可顯示博士十二神、長生十二神、小限與各宮的大限年齡區間（陽男陰女順行、陰男陽女逆行）。</p>`;
   return`<div class="card zw-card"><h3>命盤</h3><div class="zw">${cells}${center}</div>${note}
     <p><small>每宮由右至左：主星、六吉六煞與雜曜；左下為博士、歲前、將前十二神；下方為流年與小限（虛歲）；底列為大限、宮名、長生與宮干支。年柱以農曆正月初一換年，閏月十五日後算下個月。四化：<i class="sh sh0">祿</i>財源順利、<i class="sh sh1">權</i>掌控、<i class="sh sh2">科</i>名聲貴人、<i class="sh sh3">忌</i>執著課題。</small></p></div>
-    <button class="toggle" data-lock="1" data-target="zw-detail" data-label="紫微解析">查看紫微解析</button>
+    <button class="toggle" data-target="zw-detail" data-label="紫微解析">查看紫微解析</button>
     <div id="zw-detail" class="hidden">${ziweiAnalysis(Z,S)}</div>`;
 }
 function ziweiAnalysis(Z,S){

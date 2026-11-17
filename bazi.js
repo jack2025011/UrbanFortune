@@ -167,7 +167,10 @@ function baziHtml(S,hz){
   const R=calcBazi(S.y,S.m,S.d,hz),P=R.P,me=P[2][0];
   const order=[3,2,1,0];                                // 時、日、月、年
   const names=["年柱","月柱","日柱","時柱"];
-  const row=(label,fn)=>`<tr><th>${label}</th>${order.map(i=>`<td>${fn(i)}</td>`).join("")}</tr>`;
+  const row=(label,fn,min)=>{
+    if(min&&!entitled(min))                                  // 沒有權限：用假字模糊顯示，不放真實內容
+      return`<tr><th>${label}</th>${order.map((i,k)=>`<td><span class="fz">${["██ ██","█ ███","███ █","██ █"][(i+k)%4]}</span></td>`).join("")}</tr>`;
+    return`<tr><th>${label}</th>${order.map(i=>`<td>${fn(i)}</td>`).join("")}</tr>`};
   const ss=shensha(P,S.gender);
   const kw=i=>{const idx=sexa(P[i][0],P[i][1]);return kongwang(idx).map(z=>ZHI[z]).join("")};
   const table=`<table class="mp">
@@ -176,12 +179,12 @@ function baziHtml(S,hz){
     ${row("天干",i=>`<b class="big ${WXC[GAN_WX[P[i][0]]]}">${GAN[P[i][0]]}</b>`)}
     ${row("地支",i=>`<b class="big ${WXC[ZHI_WX[P[i][1]]]}">${ZHI[P[i][1]]}</b>`)}
     ${row("藏干",i=>HIDDEN[P[i][1]].map(g=>`${GAN[g]} ${GAN_WX[g]}`).join("<br>"))}
-    ${row("副星",i=>HIDDEN[P[i][1]].map(g=>shishen(me,g)).join("<br>"))}
+    ${row("副星",i=>HIDDEN[P[i][1]].map(g=>shishen(me,g)).join("<br>"),1)}
     ${row("納音",i=>NAYIN[Math.floor(sexa(P[i][0],P[i][1])/2)])}
-    ${row("星運",i=>changsheng(me,P[i][1]))}
-    ${row("自坐",i=>changsheng(P[i][0],P[i][1]))}
-    ${row("空亡",kw)}
-    ${row("神煞",i=>ss[i].map(n=>`<span class="sn">${n}</span>`).join("")||"—")}
+    ${row("星運",i=>changsheng(me,P[i][1]),1)}
+    ${row("自坐",i=>changsheng(P[i][0],P[i][1]),1)}
+    ${row("空亡",kw,1)}
+    ${row("神煞",i=>ss[i].map(n=>`<span class="sn">${n}</span>`).join("")||"—",1)}
   </table><p class="note">神煞依傳統通行說法排列；各派與各軟體列出的種類、取法略有不同，僅供參考。</p>`;
   const cnt={木:0,火:0,土:0,金:0,水:0};
   P.forEach(([g,z])=>{cnt[GAN_WX[g]]++;cnt[ZHI_WX[z]]++});
@@ -255,11 +258,14 @@ function baziHtml(S,hz){
   }).join("")||'<p>命盤中沒有出現本站列出的神煞。</p>';
   const shaCard=`<div class="card"><h3>神煞解析</h3>${shaHtml}
     <p class="note">神煞是傳統命理的輔助參考，依「所在柱位」看影響的人事時地；吉凶要與整體命盤、大運一起判斷，不宜單看一個神煞下定論。</p></div>`;
-  const anaCard=`<button class="toggle" data-lock="1" data-target="ss-detail" data-label="十神・神煞解析">查看十神・神煞解析</button>
+  const anaCard=`<button class="toggle" data-target="ss-detail" data-label="十神・神煞解析">查看十神・神煞解析</button>
     <div id="ss-detail" class="hidden"><div class="card"><h3>各柱位置的意義</h3>${posLegend}</div>
     <div class="card"><h3>十神解析</h3>${analysis}
     <p class="note">以上為十神的一般性說明，依日主「${GAN[me]}${GAN_WX[me]}」計算；同一個十神出現在不同柱，意義會不同。實際強弱還要看月令、合沖與大運，僅供參考。</p></div>${shaCard}</div>`;
   BZ_CUR={P,me,ss,cnt,lack,cntS,posS,score,helpScore,strong,yong,ji,status,mw};
-  return`<div class="card"><h3>命盤</h3>${table}</div>${info}${wxCard}${anaCard}
+  const infoG=entitled(1)?info:gateTeaser(1,"基本資料",["節氣、人元司令","命宮、胎元、胎息、身宮","空亡"]);
+  const wxG=entitled(1)?wxCard:gateTeaser(1,"五行與十神統計",["身強身弱與五行分數","參考用神與忌神","十神數量與旺相休囚死"]);
+  const anaG=entitled(2)?anaCard:gateTeaser(2,"十神與神煞解析",["各柱位置的意義","十神解析（依所在柱位）","神煞解析（依所在柱位）"]);
+  return`<div class="card"><h3>命盤</h3>${table}</div>${infoG}${wxG}${anaG}
     <p class="note">節氣由太陽位置推算，誤差約十分鐘內；出生在節氣交接當天請以萬年曆為準。時間取該時辰的起始整點。</p>`;
 }

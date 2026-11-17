@@ -414,3 +414,49 @@ details.lf-dec[open]>summary::after{content:"－"}
 .lf-ds ul{margin:4px 0 0;padding-left:20px}.lf-ds li{margin:3px 0}
 .lf-ds.adv{background:rgba(111,224,111,.08);border-left:3px solid #6fe06f;padding:6px 10px;border-radius:6px}
 .lf-ds .zp{display:block;margin-top:3px;font-size:13.5px}
+
+/* ===== 霧面預覽（付費內容）===== */
+.gate{position:relative;margin:14px 0;border-radius:10px;overflow:hidden;border:1px solid rgba(180,150,90,.35);min-height:190px}
+.gate-body{padding:14px;filter:blur(5px);pointer-events:none;user-select:none;opacity:.8}
+.gate-body h4{margin:10px 0 6px;font-size:15px}
+.fk{height:10px;border-radius:5px;background:rgba(150,130,100,.45);margin:8px 0}
+.gate-cta{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;padding:16px;
+  background:linear-gradient(180deg,rgba(20,14,30,.25),rgba(20,14,30,.6));-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);color:#fff}
+.gate-cta span{font-size:13px;opacity:.9}
+.gate-ic{font-size:26px}
+.gate-btn{margin-top:6px;padding:9px 22px;border:0;border-radius:20px;background:#c9a24d;color:#1c1326;font-weight:700;font-size:14px;cursor:pointer}
+.gz{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:10px}
+.gz-c{border:1px solid rgba(150,130,100,.5);border-radius:4px;padding:6px;min-height:82px}
+.fz{display:inline-block;filter:blur(4px);opacity:.7;user-select:none}
+/* 方案視窗 */
+.plans{position:fixed;inset:0;z-index:90;background:rgba(0,0,0,.6);display:flex;align-items:flex-end;justify-content:center}
+.plans[hidden]{display:none}
+.plans-box{background:#fff;color:#222;width:100%;max-width:520px;max-height:88vh;overflow:auto;border-radius:16px 16px 0 0;padding:14px 14px 22px}
+.plans-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.plans-why{margin:4px 0 10px;font-size:14px;color:#8a5a00}
+.plan{border:1px solid #ddd;border-radius:10px;padding:10px 12px;margin-bottom:10px}
+.plan.want{border-color:#c9a24d;box-shadow:0 0 0 2px rgba(201,162,77,.3)}
+.plan.cur{background:#faf5e8}
+.plan-h{display:flex;gap:8px;align-items:baseline}.plan-h span{margin-left:auto;color:#8a5a00;font-weight:700}
+.plan-h em{font-style:normal;font-size:11px;background:#333;color:#fff;border-radius:8px;padding:1px 7px}.plan-h em.w{background:#c9a24d;color:#222}
+.plan ul{margin:6px 0 0;padding-left:18px;font-size:13px;line-height:1.6}
+.plans-note{font-size:12px;color:#777;text-align:center}
+/* 管理者預覽列 */
+.admin-bar{position:fixed;left:0;right:0;bottom:0;z-index:80;display:flex;gap:6px;align-items:center;justify-content:center;flex-wrap:wrap;padding:8px;background:#1c1326;color:#fff;font-size:13px}
+.admin-bar[hidden]{display:none}
+.admin-bar button{border:1px solid #c9a24d;background:transparent;color:#c9a24d;border-radius:14px;padding:4px 12px}
+.admin-bar button.on{background:#c9a24d;color:#1c1326;font-weight:700}
+.admin-bar .out{border-color:#999;color:#ccc}
+body.is-admin{padding-bottom:56px}
+#admin-link{color:inherit;opacity:.5;font-size:12px}
+/* 流年詳細解析 */
+.ln-detail{margin-top:12px;line-height:1.75;font-size:14px}
+.ln-detail h5{margin:14px 0 6px;font-size:15px;color:#8a5a00}
+.ln-story{background:rgba(201,162,77,.12);border-left:3px solid #c9a24d;border-radius:6px;padding:10px 12px}
+.ln-story-t{font-weight:700;margin-bottom:4px}
+.ln-q{padding-left:18px}
+.ln-dd{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ln-dd .y,.ln-dd .n{border-radius:8px;padding:8px 10px;font-size:13px}
+.ln-dd .y{background:rgba(60,150,90,.12)}.ln-dd .n{background:rgba(190,70,70,.12)}
+.ln-dd ul{margin:4px 0 0;padding-left:16px}
+.ln-adv{font-weight:600}

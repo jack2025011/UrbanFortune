@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>URBAN 命理</title>
-<link rel="stylesheet" href="style.css?v=202611170817">
+<link rel="stylesheet" href="style.css?v=202611171000">
 </head>
 <body>
 
@@ -97,8 +97,7 @@
           </div>
         </div>
         <p class="legend"><span class="lg o"></span>先天數　<span class="lg t"></span>後天數　<span class="lg s"></span>主命數</p>
-        <button class="toggle in-card" data-lock="1" data-target="ls-detail" data-label="詳細解析">查看詳細解析</button>
-        <div id="ls-detail" class="hidden"></div>
+        <div id="ls-gate"></div>
       </div>
       <div id="liunian"></div>
     </section>
@@ -109,8 +108,7 @@
         <div class="tarot-grid" id="tarot-grid"></div>
         <div id="career-tarot"></div>
       </div>
-      <button class="toggle" data-lock="1" data-target="tarot-detail" data-label="詳細解析">查看詳細解析</button>
-      <div id="tarot-detail" class="hidden"></div>
+      <div id="tarot-gate"></div>
     </section>
 
     <section id="bazi" class="panel"></section>
@@ -121,7 +119,7 @@
 
 <div id="lock" class="lock" hidden>
   <div class="lock-box">
-    <h3>🔒 請輸入密碼</h3>
+    <h3>🔒 管理者登入</h3>
     <input id="lock-pw" type="password" autocomplete="off" placeholder="密碼">
     <p class="err" id="lock-err"></p>
     <div class="row2"><button class="ghost" id="lock-cancel" type="button">取消</button><button class="go lock-ok" id="lock-ok" type="button">解鎖</button></div>
@@ -142,13 +140,29 @@
   <div class="lf-scroll"><div id="lf-body" class="lf-body"></div></div>
 </div>
 
-<footer>僅供娛樂參考，不構成任何決策建議。</footer>
-<script src="data.js?v=202611170817"></script>
-<script src="bazi.js?v=202611170817"></script>
-<script src="lunar.js?v=202611170817"></script>
-<script src="ziwei.js?v=202611170817"></script>
-<script src="print.js?v=202611170817"></script>
-<script src="life.js?v=202611170817"></script>
-<script src="app.js?v=202611170817"></script>
+<div id="plans" class="plans" hidden>
+  <div class="plans-box">
+    <div class="plans-bar"><b>✦ 方案</b><button id="plans-close" type="button" class="po-b">關閉</button></div>
+    <p id="plans-why" class="plans-why"></p>
+    <div id="plans-list"></div>
+    <p id="plans-note" class="plans-note"></p>
+  </div>
+</div>
+<div id="admin-bar" class="admin-bar" hidden>
+  <span>🛠 管理者預覽</span>
+  <button type="button" data-pv="0">免費</button><button type="button" data-pv="1">68</button><button type="button" data-pv="2">168</button><button type="button" data-pv="3">888</button>
+  <button type="button" id="admin-out" class="out">登出</button>
+</div>
+
+<footer>僅供娛樂參考，不構成任何決策建議。<br><a id="admin-link" href="#">管理者登入</a></footer>
+<script src="data.js?v=202611171000"></script>
+<script src="plans.js?v=202611171000"></script>
+<script src="liunian.js?v=202611171000"></script>
+<script src="bazi.js?v=202611171000"></script>
+<script src="lunar.js?v=202611171000"></script>
+<script src="ziwei.js?v=202611171000"></script>
+<script src="print.js?v=202611171000"></script>
+<script src="life.js?v=202611171000"></script>
+<script src="app.js?v=202611171000"></script>
 </body>
 </html>

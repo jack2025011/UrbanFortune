@@ -186,6 +186,57 @@ function lfDecades(){
   return{age,list};
 }
 
+
+// ---------- 人生階段（大限）的白話說明 ----------
+const LF_DEC_THEME=[
+ "這十年是「自己」當主角的階段：個性、機會與人生方向都會被放大，你的選擇與態度，會直接決定這十年的樣子。適合認識自己、確立方向、打造自己的特色。",
+ "這十年的重心在同輩、朋友與合作關係，也牽涉到現金流與資源的往來。夥伴與兄弟姊妹會對你影響很大；適合互相扶持、一起打拚，但金錢往來要分清楚。",
+ "感情、婚姻與親密關係是這十年的主角，也是學習「與另一個人相處」的階段。適合認真經營感情、談婚論嫁，同時也要面對磨合與相處的課題。",
+ "這十年與子女、晚輩、創作和桃花有關：可能是生養孩子、帶領後輩，或把才華拿出來創作；感情的愉悅、休閒與投資的運用也在這裡。",
+ "賺錢與理財是這十年的重心：收入結構、投資、消費習慣都會被檢視。適合建立穩定的財源、學習理財，也是把能力變成收入的階段。",
+ "身體與體質是這十年要特別照顧的主題：工作壓力、作息與慢性問題容易浮現，也代表你面對挫折的承受度。是重新建立健康習慣的好時機。",
+ "外出、搬遷與拓展人際圈是這十年的主題：機會常在「外面」，可能是出差、出國、換環境或跨地區發展。在外要謹慎安全，也要維持與家人的聯繫。",
+ "朋友、同事、部屬與人脈是這十年的重心：貴人與小人都會在這裡出現。適合拓展人脈、組織團隊，但要學會辨識哪些人值得信任。",
+ "事業、工作與學業成就是這十年的主角：升遷、轉換跑道、創業或專業累積，多半在這個階段發生，是衝刺成就的時期。",
+ "家庭、不動產與家運是這十年的重心：可能購屋置產、搬家裝修，或與家人關係出現變化，也代表財庫與生活的安定感。",
+ "精神生活與心境是這十年的主題：重視興趣、享受、內心平靜與人生意義，也和思慮、煩惱、休閒有關。是調整心態、找回快樂的階段。",
+ "與父母長輩、上司、學習與文書有關：可能受長輩影響大、考試進修、簽約文件，也可能是照顧長輩的階段。"];
+const LF_DEC_ADVICE=[
+ "把握機會認識自己、設定目標；重要決定多參考他人意見，避免只憑一時衝動。",
+ "與夥伴合作前先講清楚分工與金錢；多與同輩互相扶持，少做借貸與擔保。",
+ "認真看待感情、主動溝通；把磨合當成成長，而不是否定彼此。",
+ "多陪伴晚輩或孩子，也給自己創作與休閒的空間；留意感情與投資上的衝動。",
+ "先建立預算、儲蓄與保險，再談投資；避免情緒性消費與高風險借貸。",
+ "定期健檢、規律作息、學習紓壓；不要硬撐，身體的小警訊要早點處理。",
+ "樂於走出去、爭取外地或新環境的機會；出外注意安全，也別忘了照顧家人的感受。",
+ "經營人脈、建立團隊；交友重品質，遇到借貸或合夥邀約要審慎評估。",
+ "專注在事業或學業的長期累積，勇於承擔；同時留意工作與生活的平衡。",
+ "適合規劃置產、整頓家居與家庭財務；與家人多溝通，量力而為。",
+ "培養興趣與休息的習慣、學會放下煩惱；找到讓自己快樂與平靜的方式。",
+ "多向長輩與前輩請益、把握進修與考證的機會；文件與合約要看仔細。"];
+const LF_AGE=[[11,"童年到青少年初期，主要受家庭與環境影響，個性與習慣在這時成形。"],[21,"求學與青春期：探索自我、建立同儕關係的時期。"],[31,"出社會與起步階段：工作、感情與獨立生活的起點，常有很多嘗試。"],[41,"成家立業的階段：責任變多，事業、家庭與經濟壓力同時成形。"],[51,"中年承擔期：事業與家庭進入穩定或衝刺，也開始檢視人生方向。"],[61,"中年轉換期：體力、角色與重心開始調整，也是累積成果的階段。"],[71,"邁向退休、重新安排生活的階段：重視健康、家人與生活品質。"],[999,"晚年：享受生活、含飴弄孫，重視身心安適與陪伴。"]];
+function lfAgeText(a){return LF_AGE.find(x=>a<=x[0])[1]}
+function lfDecCard(p,age){
+  const cur=age>=p.dx[0]&&age<=p.dx[1],past=age>p.dx[1],tag=cur?"目前":past?"已走過":"未來";
+  const mains=lfPalaceMains(p.i),m=mains.names;
+  // 星曜風格
+  const starLines=m.map(n=>`<div class="lf-ds"><b>${n}${mains.borrowed?"（借對宮）":""}</b>：${lfEsc(lfFirst(ZW_MAIN_TEXT[n]))}。<span class="zp">在${p.name}：${lfEsc(ZW_STAR_PALACE[n][p.i])}</span></div>`).join("");
+  const hard=m.some(n=>LF_HARD_STARS.has(n)),good=m.length&&m.every(n=>LF_GOOD_STARS.has(n));
+  const tone=!m.length?"這一宮沒有主星，借對宮的星曜來看，風格會受外在環境影響較大。":good?"主星偏穩健，這十年相對順遂，重點是把握機會、穩步累積。":hard?"主星帶有衝刺或變動的特質，這十年挑戰與變化較多，但也是成長與突破的機會。":"主星吉凶參半，依你的選擇而定，保持彈性最重要。";
+  // 輔星
+  const aux=p.stars.filter(s=>!s.main&&!s.minor).map(s=>s.n),ga=aux.filter(n=>LF_GOOD_AUX.has(n)),ba=aux.filter(n=>LF_BAD_AUX.has(n));
+  const auxLine=(ga.length?`<div class="lf-ds">助力：${ga.join("、")}，這十年較容易得到貴人、才藝或穩定的支持。</div>`:"")+(ba.length?`<div class="lf-ds">留意：${ba.join("、")}，容易遇到衝突、急躁或波折，行事要放緩。</div>`:"");
+  // 四化：本宮的四化、以及這十年大限的四化（依大限宮的天干）
+  const own=lfSihuaIn(p.i).map(h=>`${h.n}化${ZW_SH_NAME[h.k]}在此宮（${ZW_SH_TEXT[h.k]}）`);
+  const parts=ZW_SIHUA[p.gan].map((star,k)=>{const q=Z_CUR.palaces.find(pp=>pp.stars.some(s=>s.n===star));return q?{k,star,q}:null}).filter(Boolean);
+  const lu=parts.find(x=>x.k===0),ji=parts.find(x=>x.k===3),qu=parts.find(x=>x.k===1),ke=parts.find(x=>x.k===2);
+  const dxSh=[lu&&`<b>化祿</b>（${lu.star}）入${lu.q.name}：機會與順利集中在「${ZW_SHORT[lu.q.i]}」`,qu&&`<b>化權</b>（${qu.star}）入${qu.q.name}：想主導、有行動力的是「${ZW_SHORT[qu.q.i]}」`,ke&&`<b>化科</b>（${ke.star}）入${ke.q.name}：「${ZW_SHORT[ke.q.i]}」較容易得到名聲與貴人`,ji&&`<b>化忌</b>（${ji.star}）入${ji.q.name}：「${ZW_SHORT[ji.q.i]}」要多留意、容易執著或有壓力`].filter(Boolean);
+  const sihuaHtml=(own.length?`<div class="lf-ds">本命四化落在此宮：${own.map(lfEsc).join("；")}。</div>`:"")+(dxSh.length?`<div class="lf-ds"><b>這十年的四化</b>（依大限宮干${GAN[p.gan]}）：<ul>${dxSh.map(x=>`<li>${x}</li>`).join("")}</ul></div>`:"");
+  return`<details class="lf-dec${cur?" cur":""}${past?" past":""}"${cur?" open":""}><summary><div class="lf-dh"><b>${p.dx[0]}～${p.dx[1]} 歲</b><span>${p.name}${m.length?"（"+m.join("、")+"）":""}</span><em class="lf-tg ${cur?"c":past?"p":"f"}">${tag}</em></div><div class="lf-dd">${ZW_DOMAIN[p.i]}</div></summary>
+    <div class="lf-db"><div class="lf-ds"><b>這個年紀</b>：${lfAgeText(p.dx[0])}</div><div class="lf-ds"><b>這十年的主題</b>：${LF_DEC_THEME[p.i]}</div>
+    ${starLines}<div class="lf-ds"><b>整體傾向</b>：${tone}</div>${auxLine}${sihuaHtml}<div class="lf-ds adv"><b>建議</b>：${LF_DEC_ADVICE[p.i]}</div></div></details>`;
+}
+
 // ---------- 建議 ----------
 function lfAdvice(cross,domains){
   const adv=[];
@@ -241,9 +292,9 @@ function lfLifeHtml(){
   const domCards=Object.entries(doms).map(([k,s])=>`<div class="card lf-card"><h3>${k}</h3>${lfSigHtml(s,k)}</div>`).join("");
   // 人生階段
   const dec=lfDecades();let decHtml="";
-  if(dec){decHtml=`<div class="card lf-card"><h3>人生階段（大限）</h3><p class="lf-note">依紫微大限，約以虛歲 ${dec.age} 歲計算。</p>`
-    +dec.list.map(p=>{const cur=dec.age>=p.dx[0]&&dec.age<=p.dx[1],m=lfMains(p);
-      return`<div class="lf-dec${cur?" cur":""}"><div class="lf-dh"><b>${p.dx[0]}～${p.dx[1]} 歲</b><span>${p.name}${m.length?"（"+m.join("、")+"）":""}${cur?"　◀ 目前":""}</span></div><div class="lf-dd">${ZW_DOMAIN[p.i]}</div></div>`}).join("")+`</div>`}
+  if(dec){
+    const intro=`<div class="lf-intro"><b>大限是什麼？</b>紫微斗數把人生每十年分成一個階段，每個階段會「走到」一個宮位，這十年的重心與課題，就由那一宮代表。例如走到「夫妻宮」，這十年感情與婚姻會成為主題。<br>順序從命宮開始，依性別與出生年的陰陽（陽男、陰女順行；陰男、陽女逆行）排下去，所以每個人走過宮位的順序都不一樣。<br><b>怎麼看：</b>宮位＝這十年的主題；宮裡的主星＝這十年的風格；<span class="sh sh0">祿</span>機會順利、<span class="sh sh1">權</span>掌控行動、<span class="sh sh2">科</span>名聲貴人、<span class="sh sh3">忌</span>壓力課題，說明機會與壓力落在哪裡。<br><small>年齡以虛歲計算（約略對照），你目前約 ${dec.age} 歲，已自動展開「目前」這一段；點其他階段可以展開看。實際影響還要搭配每年的流年。</small></div>`;
+    decHtml=`<div class="card lf-card"><h3>人生階段（大限）</h3>${intro}${dec.list.map(p=>lfDecCard(p,dec.age)).join("")}</div>`}
   else if(Z_CUR)decHtml=`<div class="card lf-card"><h3>人生階段（大限）</h3><p class="lf-none">填寫性別後，才能依陽男陰女、陰男陽女的順逆行排出每十年的大限。</p></div>`;
   // 近期
   const Y=new Date().getFullYear();

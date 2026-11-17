@@ -212,26 +212,27 @@ function baziHtml(S,hz){
   const meWx=WX_IDX[GAN_WX[me]];
   const shiWx={比肩:0,劫財:0,食神:1,傷官:1,偏財:2,正財:2,七殺:3,正官:3,偏印:4,正印:4};
   SHISHEN_ORDER.forEach(n=>wxShi[WXN[mod(meWx+shiWx[n],5)]].push(`${n}${cntS[n]}`));
-  // ===== 五行分數（本站參考算法，共 60 分）=====
+  // ===== 五行分數（共 60 分；以兩張對照命盤校正，整數吻合）=====
   // 天干每個 5 分（含日主）；地支：年8、月16（當令加重）、日8、時8，再依本氣／中氣／餘氣分給藏干
   const SW=[5,5,5,5],BW=[8,16,8,8],score={木:0,火:0,土:0,金:0,水:0};
   P.forEach(([g,z],i)=>{
     score[GAN_WX[g]]+=SW[i];
-    const hs=HIDDEN[z],sh=hs.length===1?[1]:hs.length===2?[.7,.3]:[.6,.3,.1];
+    const hs=HIDDEN[z],sh=hs.length===1?[1]:hs.length===2?[5/8,3/8]:[5/8,2/8,1/8];   // 地支藏干：本氣、中氣、餘氣 依 5：2：1（兩藏干為 5：3）
     hs.forEach((h,k)=>{score[GAN_WX[h]]+=BW[i]*sh[k]});
   });
   const wxAt=r=>WXN[mod(meWx+r,5)];                          // 相對日主的五行：0同我 1我生 2我克 3克我 4生我
   const helpScore=score[wxAt(0)]+score[wxAt(4)];              // 生扶＝比劫＋印
   const strong=helpScore>30;
-  const yong=strong?[wxAt(1),wxAt(2),wxAt(3)]:[wxAt(4),wxAt(0)];   // 身強用食傷、財、官殺；身弱用印、比劫
-  const ji=strong?[wxAt(0),wxAt(4)]:[wxAt(1),wxAt(2),wxAt(3)];
+  // 身強：用食傷、財、官殺，忌比劫、印；身弱：用比劫、印，忌官殺（與對照命盤一致）
+  const yong=strong?[wxAt(1),wxAt(2),wxAt(3)]:[wxAt(0),wxAt(4)];
+  const ji=strong?[wxAt(0),wxAt(4)]:[wxAt(3)];
   const wxRows=WXN.map(w=>`<tr><th class="${WXC[w]}">${w}</th><td>${status[w]}</td><td>${Math.round(score[w])}</td><td class="ss-c">${wxShi[w].join(" ")}</td></tr>`).join("");
   const wxCard=`<div class="card"><h3>五行與十神</h3>
     <div class="strength"><span class="st-l">命主屬性</span><b class="${WXC[GAN_WX[me]]}">${GAN[me]}（${GAN_WX[me]}）</b><b class="st-v ${strong?"s":"w"}">${strong?"身強":"身弱"}（${Math.round(helpScore)}）</b></div>
     <div class="strength"><span class="st-l">參考用神</span><span class="st-t">${yong.map(w=>`<b class="${WXC[w]}">${w}</b>`).join(" ")}</span></div>
     <div class="strength"><span class="st-l">參考忌神</span><span class="st-t">${ji.map(w=>`<b class="${WXC[w]}">${w}</b>`).join(" ")}</span></div>
     <table class="mp2"><tr class="hd"><th>五行</th><th>月令</th><th>分數</th><th>十神數量</th></tr>${wxRows}</table>
-    <p><small>以月支「${ZHI[P[1][1]]}」為當令（${mw}旺）；十神數量＝天干（不含日主）＋所有藏干。身強弱以「生扶（比劫＋印）」分數過半（超過 30 分）為身強；分數為本站參考算法，與其他軟體可能差 1～2 分，用神忌神僅供參考。</small></p></div>`;
+    <p><small>以月支「${ZHI[P[1][1]]}」為當令（${mw}旺）；十神數量＝天干（不含日主）＋所有藏干。身強弱以「生扶（比劫＋印）」分數過半（超過 30 分）為身強。用神、忌神採扶抑法：身強者以食傷、財、官殺為用，比劫、印為忌；身弱者以比劫、印為用，官殺為忌。用神各派取法不同（另有調候、通關等），僅供參考，不宜單憑此下定論。</small></p></div>`;
   // ===== 十神解析（依所在柱位）=====
   const posLegend=POS_MEANING.map(p=>`<p><b>${p.name}</b>：${p.who}<br><small>${p.desc}</small></p>`).join("")
     +`<p><small>天干＝外顯、別人看得到的表現；藏干＝內在、潛藏或較晚才顯現的特質。</small></p>`;

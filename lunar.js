@@ -45,7 +45,8 @@ const LN_DAY=["初一","初二","初三","初四","初五","初六","初七","�
 const SHENGXIAO=["鼠","牛","虎","兔","龍","蛇","馬","羊","猴","雞","狗","豬"];
 function lunarDate(y,m,d){
   const D=dayNo(y,m,d);
-  const zy=D>=solsticeDay(y)?y:y-1;                      // 取不晚於 D 的冬至所在的年
+  // 以「冬至所在的朔月（十一月）」為界：D 若早於今年的十一月初一，就屬於去年冬至起算的週期
+  const zy=D>=nmDay(kOfDay(solsticeDay(y)))?y:y-1;
   const Zp=solsticeDay(zy),Zn=solsticeDay(zy+1);
   const kz=kOfDay(Zp),kn=kOfDay(Zn),n=kn-kz;             // 冬至月到下個冬至月：12 或 13 個月
   const starts=[];for(let i=0;i<=n;i++)starts.push(nmDay(kz+i));

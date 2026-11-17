@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>URBAN 命理</title>
-<link rel="stylesheet" href="style.css?v=202611170253">
+<link rel="stylesheet" href="style.css?v=202611170258">
 </head>
 <body>
 
@@ -129,16 +129,20 @@
 </div>
 
 <div id="po" class="po" hidden>
-  <div class="po-bar"><button id="po-print" type="button" class="po-b main">列印 / 存成 PDF</button><button id="po-close" type="button" class="po-b">關閉</button></div>
-  <div class="po-scroll"><div id="po-box" class="sheet-box"><div id="po-sheet" class="sheet"></div></div></div>
+  <div class="po-bar" id="po-bar-main"><button id="po-img" type="button" class="po-b main">存成圖片</button><button id="po-print" type="button" class="po-b">列印 / PDF</button><button id="po-close" type="button" class="po-b">關閉</button></div>
+  <div class="po-bar" id="po-bar-img" hidden><button id="po-dl" type="button" class="po-b main">下載圖片</button><button id="po-share" type="button" class="po-b" hidden>分享 / 存到相簿</button><button id="po-back" type="button" class="po-b">返回</button></div>
+  <div class="po-scroll">
+    <div id="po-box" class="sheet-box"><div id="po-sheet" class="sheet"></div></div>
+    <div id="po-result" hidden><p class="po-hint">✦ 長按下方圖片，選「儲存到相簿」（或「加入照片」）✦</p><img id="po-pic" alt="命盤圖片"></div>
+  </div>
 </div>
 
 <footer>僅供娛樂參考，不構成任何決策建議。</footer>
-<script src="data.js?v=202611170253"></script>
-<script src="bazi.js?v=202611170253"></script>
-<script src="lunar.js?v=202611170253"></script>
-<script src="ziwei.js?v=202611170253"></script>
-<script src="print.js?v=202611170253"></script>
-<script src="app.js?v=202611170253"></script>
+<script src="data.js?v=202611170258"></script>
+<script src="bazi.js?v=202611170258"></script>
+<script src="lunar.js?v=202611170258"></script>
+<script src="ziwei.js?v=202611170258"></script>
+<script src="print.js?v=202611170258"></script>
+<script src="app.js?v=202611170258"></script>
 </body>
 </html>

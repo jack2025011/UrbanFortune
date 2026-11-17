@@ -121,20 +121,7 @@ $("#lock-ok").onclick=tryUnlock;
 $("#lock-cancel").onclick=closeLock;
 $("#lock-pw").addEventListener("keydown",e=>{if(e.key==="Enter")tryUnlock()});
 $("#lock").addEventListener("click",e=>{if(e.target.id==="lock")closeLock()});
-function renderAll(){renderZodiac();renderNumerology();renderTarot();renderBazi();renderDivine()}
-
-// ========== 星座 ==========
-function seeded(str){let h=2166136261;for(const c of str){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}
-  return()=>{h=Math.imul(h^h>>>15,2246822507);h=Math.imul(h^h>>>13,3266489909);h^=h>>>16;return(h>>>0)/4294967296}}
-function signOf(m,d){let r=SIGNS[11];for(const s of SIGNS){if(m>s[1]||(m===s[1]&&d>=s[2]))r=s}return r}
-function renderZodiac(){
-  const s=signOf(S.m,S.d),n=new Date(),t=`${n.getFullYear()}-${n.getMonth()+1}-${n.getDate()}`,r=seeded(s[0]+t);
-  const bar=(k)=>`<div class="bar"><b>${k}</b><i><u style="width:${(1+Math.floor(r()*5))*20}%"></u></i></div>`;
-  $("#zodiac").innerHTML=`<div class="card"><h3>${s[0]}　今日運勢</h3><p>${s[3]}</p>
-  ${bar("整體")}${bar("愛情")}${bar("事業")}${bar("財運")}
-  <p>${TIPS[Math.floor(r()*TIPS.length)]}</p>
-  <p>幸運色：<strong>${COLORS[Math.floor(r()*COLORS.length)]}</strong>　幸運數字：<strong>${1+Math.floor(r()*9)}</strong></p></div>`;
-}
+function renderAll(){renderNumerology();renderTarot();renderBazi()}
 
 // ========== 生命靈數 ==========
 const digitSum=s=>String(s).split("").reduce((a,b)=>a+ +b,0);

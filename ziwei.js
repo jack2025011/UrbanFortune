@@ -27,11 +27,12 @@ const ZW_KEY={
  "紫微":"尊貴、領導","天機":"智謀、變動","太陽":"光明、付出","武曲":"財星、果決","天同":"福星、知足","廉貞":"情感、原則","天府":"財庫、守成",
  "太陰":"細膩、積累","貪狼":"慾望、才藝","巨門":"口才、是非","天相":"服務、輔佐","天梁":"蔭庇、照顧","七殺":"衝刺、獨立","破軍":"變革、突破",
  "左輔":"平輩貴人","右弼":"異性/晚輩貴人","文昌":"文才、考試","文曲":"口才、才藝","天魁":"長輩貴人","天鉞":"暗中貴人",
- "祿存":"財庫、保守","擎羊":"衝勁、競爭","陀羅":"拖延、糾纏","火星":"急躁、爆發","鈴星":"暗火、壓抑","地劫":"劫耗、先破後立","天空":"空靈、不執著",
+ "祿存":"財庫、保守","擎羊":"衝勁、競爭","陀羅":"拖延、糾纏","火星":"急躁、爆發","鈴星":"暗火、壓抑","地劫":"劫耗、先破後立","地空":"空靈、不執著",
  "紅鸞":"桃花、喜慶","天喜":"喜事、人緣","天馬":"奔波、變動"};
 const ZW_JU_NAME={2:"水二局",3:"木三局",4:"金四局",5:"土五局",6:"火六局"};
 const ZW_SHEN_PALACE_TEXT=[ "身宮在命宮：後半生仍以自己的個性與想法為主。","身宮在兄弟宮：後半生重視同輩、朋友與合作關係。","身宮在夫妻宮：後半生重視感情與婚姻，配偶影響大。","身宮在子女宮：後半生重視子女、創作與晚輩緣。","身宮在財帛宮：後半生重視賺錢與物質生活。","身宮在疾厄宮：後半生要多留意身體，健康影響生活品質。","身宮在遷移宮：後半生適合外出發展，人際與環境影響大。","身宮在交友宮：後半生重視人脈，朋友與部屬是助力。","身宮在官祿宮：後半生重視事業與成就，工作是重心。","身宮在田宅宮：後半生重視家庭與不動產，守成安穩。","身宮在福德宮：後半生重視精神生活與心境，講求享受與平靜。","身宮在父母宮：後半生與長輩、上司或學習的緣分深。"];
 
+const yang0=g=>g%2===0;
 function ziweiPos(day,ju){            // 起紫微：日數＋借數 能被局數整除，商數從寅宮起，借數奇退偶進
   let k=0;while((day+k)%ju!==0)k++;
   const q=(day+k)/ju;let pos=2+(q-1);
@@ -65,19 +66,61 @@ function calcZiwei(S){
   // 火星起點：申子辰寅、巳酉丑卯、寅午戌丑、亥卯未酉；鈴星起點：寅午戌卯，其餘戌
   const huoStart={0:2,1:3,2:1,3:9}[g4],lingStart={0:10,1:10,2:3,3:10}[g4];
   put("火星",huoStart+hz);put("鈴星",lingStart+hz);
-  put("地劫",11+hz);put("天空",11-hz);
+  put("地劫",11+hz);put("地空",11-hz);      // 時系：亥宮起子時順（劫）逆（空）
   put("紅鸞",3-yz);put("天喜",3-yz+6);
-  put("天馬",{0:2,1:11,2:8,3:5}[g4]);
+  put("天馬",[8,5,2,11][(month-1)%4]);                  // 天馬依生月：正月申、二月巳、三月寅、四月亥…
+  // ---- 更多星曜（雜曜）：位置依生年、生月、生日、生時推算；以使用者提供的對照命盤校正 ----
+  const pm=(n,b)=>stars[mod(b,12)].push({n,main:false,minor:true});
+  const pos=n=>{for(let b=0;b<12;b++)if(stars[b].some(s=>s.n===n))return b;return 0};
+  const lf=pos("左輔"),rb=pos("右弼"),wc=pos("文昌"),wq=pos("文曲");
+  pm("三台",lf+day-1);pm("八座",rb-(day-1));pm("恩光",wc+day-2);pm("天貴",wq+day-2);
+  pm("台輔",6+hz);pm("封誥",2+hz);
+  pm("天官",[7,4,5,2,3,9,11,9,10,6][yg]);pm("天福",[9,8,0,11,3,2,6,5,6,5][yg]);pm("天廚",[5,6,0,5,6,8,2,6,9,11][yg]);
+  pm("月德",yz+5);pm("天德",yz+9);
+  pm("破碎",[0,6,3,9].includes(yz)?5:[4,10,1,7].includes(yz)?1:9);
+  const gu=Math.floor(mod(yz+1,12)/3);
+  pm("孤辰",[2,5,8,11][gu]);pm("寡宿",[10,1,4,7][gu]);
+  pm("年解",10-yz);pm("蜚廉",[8,9,10,5,6,7,2,3,4,11,0,1][yz]);
+  pm("龍池",4+yz);pm("鳳閣",10-yz);pm("天哭",6-yz);pm("天虛",6+yz);
+  pm("天才",ming+yz);pm("天壽",shen+yz);pm("天空",yz+1);
+  const jk=[[8,9],[6,7],[4,5],[2,3],[0,1]][yg%5];pm("截空",yang0(yg)?jk[0]:jk[1]);
+  kongwang(sexa(yg,yz)).forEach(b=>pm("旬空",b));
+  pm("天姚",1+month-1);pm("天刑",9+month-1);pm("陰煞",2-2*(month-1));
+  pm("天巫",[5,8,2,11][(month-1)%4]);pm("天月",[10,5,4,2,7,3,11,7,2,6,10,2][month-1]);
+  pm("解神",[8,8,10,10,0,0,2,2,4,4,6,6][month-1]);
+  pm("天傷",mod(ming-7,12));pm("天使",mod(ming-5,12));        // 固定在交友宮、疾厄宮
+  // 顯示順序（右到左）：主星 → 六吉六煞與雜曜（依對照命盤整理）
+  const ORDER=["左輔","右弼","文昌","文曲","天魁","天鉞","天馬","祿存","擎羊","陀羅","火星","鈴星","地空","地劫","三台","八座","台輔","封誥","紅鸞","天喜","解神","恩光","天貴","天福","天廚","陰煞","天姚","天刑","龍池","鳳閣","蜚廉","天巫","天月","天傷","孤辰","寡宿","天才","天壽","天哭","天虛","天德","天官","破碎","月德","年解","天空","截空","旬空","天使"];
+  for(let b=0;b<12;b++){
+    const ms=stars[b].filter(s=>s.main),ax=stars[b].filter(s=>!s.main);
+    ax.sort((a,c)=>ORDER.indexOf(a.n)-ORDER.indexOf(c.n));
+    stars[b]=ms.concat(ax);
+  }
   // 四化標記
   const sihua={};ZW_SIHUA[yg].forEach((n,i)=>{sihua[n]=i});
   // 十二宮
   const yang=yg%2===0,forward=S.gender?((yang&&S.gender==="男")||(!yang&&S.gender==="女")):null;
+  // 十二神：歲前、將前只需年支；博士與長生、小限需要性別（順逆行）
+  const SQ=["歲建","晦氣","喪門","貫索","官符","小耗","大耗","龍德","白虎","天德","弔客","病符"];
+  const JQ=["將星","攀鞍","歲驛","息神","華蓋","劫煞","災煞","天煞","指背","咸池","月煞","亡神"];
+  const BS=["博士","力士","青龍","小耗","將軍","奏書","飛廉","喜神","病符","大耗","伏兵","官府"];
+  const CSH=["長生","沐浴","冠帶","臨官","帝旺","衰","病","死","墓","絕","胎","養"];
+  const jqStart={0:0,1:9,2:6,3:3}[g4],csStart={2:8,3:11,4:5,5:8,6:2}[ju],xxStart={0:10,1:7,2:4,3:1}[g4];
+  const male=S.gender==="男";
   const palaces=[];
   for(let i=0;i<12;i++){
     const b=mod(ming-i,12);
     let dx=null;
     if(forward!==null){const t=forward?mod(-i,12):i;dx=[ju+10*t,ju+10*t+9]}
-    palaces.push({i,name:ZW_PALACES[i],b,gan:stemOf(b),stars:stars[b],dx,isShen:b===shen});
+    const ages=[];for(let a=1+mod(b-yz,12);a<=100;a+=12)ages.push(a);       // 流年（虛歲）
+    const gods={sq:SQ[mod(b-yz,12)],jq:JQ[mod(b-jqStart,12)]};
+    let xx=null;
+    if(forward!==null){
+      gods.bs=BS[forward?mod(b-lu,12):mod(lu-b,12)];
+      gods.cs=CSH[forward?mod(b-csStart,12):mod(csStart-b,12)];
+      const a0=1+(male?mod(b-xxStart,12):mod(xxStart-b,12));xx=[];for(let a=a0;a<=100;a+=12)xx.push(a);
+    }
+    palaces.push({i,name:ZW_PALACES[i],b,gan:stemOf(b),stars:stars[b],dx,isShen:b===shen,gods,ages,xx});
   }
   return{L,month,day,yg,yz,ming,shen,ju,element,zp,tf,sihua,palaces,forward,yang,
     mingZhu:ZW_MING_ZHU[ming],shenZhu:ZW_SHEN_ZHU[yz],mingGan:stemOf(ming),stars};
@@ -89,26 +132,34 @@ const zwTag=n=>{const s=Z_CUR.sihua[n];return s===undefined?"":`<i class="sh sh$
 let Z_CUR=null;
 function ziweiHtml(S){
   const Z=calcZiwei(S);Z_CUR=Z;
+  const vt=n=>[...n].map(ch=>`<i>${ch}</i>`).join("");          // 逐字直排
   const cells=Z.palaces.map(p=>{
     const [r,c]=ZW_GRID[p.b];
-    const mains=p.stars.filter(s=>s.main).map(s=>`<div class="zs-m">${s.n}${zwTag(s.n)}</div>`).join("");
-    const aux=p.stars.filter(s=>!s.main).map(s=>`<span class="zs-a">${s.n}${zwTag(s.n)}</span>`).join("");
+    const mains=p.stars.filter(s=>s.main).map(s=>`<div class="zs-m">${vt(s.n)}${zwTag(s.n)}</div>`).join("");
+    const aux=p.stars.filter(s=>!s.main).map(s=>`<div class="zs-a${s.minor?" zs-x":""}">${vt(s.n)}${zwTag(s.n)}</div>`).join("");
+    const g=p.gods;
+    const gods=[g.bs,g.sq,g.jq].filter(Boolean).map(n=>`<span class="zg">${vt(n)}</span>`).join("");
+    const ages=`<div class="zc-ages"><b>流年</b> ${p.ages.slice(0,8).join(" ")}${p.xx?`<br><b>小限</b> ${p.xx.slice(0,8).join(" ")}`:""}</div>`;
     return`<div class="zc${p.i===0?" zc-ming":""}" style="grid-row:${r};grid-column:${c}">
-      <div class="zc-top"><span class="zc-gz">${GAN[p.gan]}${ZHI[p.b]}</span><span class="zc-name">${p.name.replace("宮","")}${p.isShen?"<em>身</em>":""}</span></div>
-      <div class="zc-main">${mains||'<span class="zs-none">　</span>'}</div><div class="zc-aux">${aux}</div>
-      ${p.dx?`<div class="zc-dx">${p.dx[0]}~${p.dx[1]}</div>`:""}</div>`;
+      <div class="zc-stars">${mains}${aux}</div>
+      <div class="zc-gods">${gods}</div>
+      ${ages}
+      <div class="zc-foot"><div class="zf-l1"><span class="zf-dx">${p.dx?p.dx[0]+"/"+p.dx[1]:"&nbsp;"}</span><span class="zf-gz">${GAN[p.gan]}${ZHI[p.b]}</span></div><div class="zf-l2"><span class="zf-cs">${g.cs||"&nbsp;"}</span><span class="zf-name">${p.name.replace("宮","")}${p.isShen?"<em>身</em>":""}</span></div></div></div>`;
   }).join("");
+  let sz=null;try{sz=calcBazi(S.y,S.m,S.d,S.hour).P.map(gz).join(" ")}catch(e){}
+  const yy=S.gender?(Z.yang?"陽":"陰")+S.gender:"";
   const center=`<div class="zc-center" style="grid-row:2/4;grid-column:2/4">
     <div class="zcc-title">紫微斗數命盤</div>
-    ${S.name?`<div>${S.name}${S.gender?"（"+S.gender+"）":""}</div>`:S.gender?`<div>${S.gender}</div>`:""}
-    <div>農曆 ${Z.L.text}</div>
-    <div>${GAN[Z.yg]}${ZHI[Z.yz]}年　${SHICHEN[S.hour]}</div>
-    <div class="zcc-b">${ZW_JU_NAME[Z.ju]}</div>
-    <div>命主：${Z.mingZhu}　身主：${Z.shenZhu}</div>
+    ${S.name?`<div>${S.name}</div>`:""}
+    <div class="zcc-b">${yy?yy+"　":""}${ZW_JU_NAME[Z.ju]}　屬${Z.L.shengxiao||SHENGXIAO[mod(Z.L.year-4,12)]}</div>
+    <div>陽曆 ${S.y}年${S.m}月${S.d}日 ${SHICHEN[S.hour]}</div>
+    <div>農曆 ${Z.L.text} ${SHICHEN[S.hour]}</div>
+    <div>命主：${Z.mingZhu}星　身主：${Z.shenZhu}星</div>
+    ${sz?`<div class="zcc-sz">${sz}</div>`:""}
   </div>`;
-  const note=S.gender?"":`<p class="note">填寫性別後可顯示各宮的大限年齡區間（陽男陰女順行、陰男陽女逆行）。</p>`;
-  return`<div class="card"><h3>命盤</h3><div class="zw">${cells}${center}</div>${note}
-    <p><small>年柱以農曆正月初一換年；閏月十五日後算下個月；時辰取該時辰整段。四化：祿＝財源順利、權＝掌控、科＝名聲貴人、忌＝執著課題。</small></p></div>
+  const note=S.gender?"":`<p class="note">填寫性別後可顯示博士十二神、長生十二神、小限與各宮的大限年齡區間（陽男陰女順行、陰男陽女逆行）。</p>`;
+  return`<div class="card zw-card"><h3>命盤</h3><div class="zw">${cells}${center}</div>${note}
+    <p><small>每宮由右至左：主星、六吉六煞與雜曜；左下為博士、歲前、將前十二神；下方為流年與小限（虛歲）；底列為大限、宮名、長生與宮干支。年柱以農曆正月初一換年，閏月十五日後算下個月。四化：<i class="sh sh0">祿</i>財源順利、<i class="sh sh1">權</i>掌控、<i class="sh sh2">科</i>名聲貴人、<i class="sh sh3">忌</i>執著課題。</small></p></div>
     <button class="toggle" data-lock="1" data-target="zw-detail" data-label="紫微解析">查看紫微解析</button>
     <div id="zw-detail" class="hidden">${ziweiAnalysis(Z,S)}</div>`;
 }
@@ -130,7 +181,7 @@ function ziweiAnalysis(Z,S){
     <div class="card"><h3>命宮主星・個性與格局</h3>${mt}</div>`;
   // 十二宮
   const palaceHtml=Z.palaces.map(p=>{
-    const ms=p.stars.filter(s=>s.main),as=p.stars.filter(s=>!s.main);
+    const ms=p.stars.filter(s=>s.main),as=p.stars.filter(s=>!s.main&&!s.minor);
     const sh=p.stars.filter(s=>Z.sihua[s.n]!==undefined).map(s=>`${s.n}化${ZW_SH_NAME[Z.sihua[s.n]]}`);
     let body=`<p class="zd">${ZW_DOMAIN[p.i]}</p>`;
     if(ms.length)body+=ms.map(s=>`<p>${s.n}（${ZW_KEY[s.n]}）：${ZW_MAIN_TEXT[s.n]}<span class="zp">（${zwStarNote(s.n,p.i)}）</span></p>`).join("");

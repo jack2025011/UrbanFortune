@@ -270,6 +270,22 @@ body.unlocked .toggle[data-lock]::before{content:"✦ "}
 .sheet .sh{color:#fff;font-size:8.5px}
 .sheet .sh0{background:#2a9d3a}.sheet .sh1{background:#2f62d6}.sheet .sh2{background:#d49300}.sheet .sh3{background:#d33}
 
+.sheet .zw-card{padding:0}
+.sheet .zw{grid-template-rows:repeat(4,minmax(112px,auto))}
+.sheet .zc-ages{display:none}
+.sheet .zw-card{margin:0}
+.sheet .zc-stars{min-height:56px}
+.sheet .zs-m{color:var(--ink);font-size:12px}
+.sheet .zs-a{color:#4a4470;font-size:9.5px}
+.sheet .zs-a.zs-x{color:#7d7699;font-size:9px}
+.sheet .zg{color:#2e7d68;font-size:9px}
+.sheet .zc-foot{border-color:#eadfbd;color:var(--muted);font-size:8.5px}
+.sheet .zf-l1{color:var(--muted)}.sheet .zf-cs{color:#2e7d68;font-size:9px}
+.sheet .zf-name{background:#a8802a;color:#fff;font-size:10px}
+.sheet .zf-name em{color:#ffe0a0}
+.sheet .zc-center{font-size:10px;line-height:1.5}
+.sheet .zcc-sz{color:#8a6414}
+
 /* 生命靈數／流年／塔羅 */
 .sh-ls{display:flex;gap:14px;align-items:center}
 .sh-grid svg{display:block}
@@ -302,3 +318,31 @@ body.unlocked .toggle[data-lock]::before{content:"✦ "}
   .sheet-box{width:210mm!important;height:297mm!important;margin:0!important}
   .sheet{transform:none!important;box-shadow:none!important;width:210mm!important;height:297mm!important;page-break-after:avoid;break-after:avoid}
 }
+
+/* 紫微命盤（擴充版：星曜直排、十二神、流年小限） */
+.zw-card{padding-left:4px;padding-right:4px;margin-left:-12px;margin-right:-12px}
+.zw-card h3{padding-left:12px}
+.zw-card>p,.zw-card>.note{margin-left:8px;margin-right:8px}
+.zw{grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(4,minmax(176px,auto))}
+.zc{min-width:0}
+.zc>*{flex-shrink:0}
+.zc{padding:3px 2px 2px}
+.zc-stars{display:flex;flex-direction:row-reverse;flex-wrap:wrap;align-content:flex-start;gap:2px 3px;min-height:62px}
+.zs-m,.zs-a,.zg{display:flex;flex-direction:column;align-items:center;white-space:nowrap}
+.zs-m i,.zs-a i,.zg i{display:block;font-style:normal;line-height:1.1}
+.zs-m{font-family:var(--serif);font-size:13.5px;font-weight:700;color:#ffe9a8}
+.zs-a{font-size:10.5px;color:#d9d3f0}
+.zs-a.zs-x{color:#a59fc4;font-size:10px}
+.zs-m .sh,.zs-a .sh{display:block;margin:1px 0 0;font-size:9px;padding:0 1px;line-height:1.3}
+.zc-gods{display:flex;flex-direction:row-reverse;gap:4px;margin-top:3px;padding-top:2px;border-top:1px dashed rgba(255,255,255,.1)}
+.zg{font-size:10px;color:#9fd6c4}
+.zc-ages{font-size:8.5px;line-height:1.35;color:#8f89b3;word-break:break-all;padding-top:3px}
+.zc-ages b{color:#7aa8ff;font-weight:500}
+.zc-foot{margin-top:auto;padding-top:2px;border-top:1px solid rgba(255,255,255,.12);font-size:9.5px;color:var(--sub)}
+.zf-l1,.zf-l2{display:flex;justify-content:space-between;align-items:center;gap:2px;white-space:nowrap}
+.zf-l1{color:#c9c3e6}.zf-l2{margin-top:2px}
+.zf-cs{color:#9fd6c4;font-size:10px}
+.zf-name{background:var(--gold);color:#1b1233;font-weight:700;border-radius:3px;padding:0 5px;font-size:11px}
+.zf-name em{font-style:normal;margin-left:2px;color:#a02020}
+.zc-center .zcc-sz{color:var(--gold);letter-spacing:.08em;margin-top:3px;font-size:12px}
+.zc-center{font-size:11.5px;line-height:1.55}

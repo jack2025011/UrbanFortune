@@ -460,3 +460,9 @@ body.is-admin{padding-bottom:56px}
 .ln-dd .y{background:rgba(60,150,90,.12)}.ln-dd .n{background:rgba(190,70,70,.12)}
 .ln-dd ul{margin:4px 0 0;padding-left:16px}
 .ln-adv{font-weight:600}
+.wk-t{margin:10px 0 4px;font-weight:700;color:#c9a24d}
+.wk{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.wk-d{border:1px solid rgba(180,150,90,.35);border-radius:8px;padding:6px 2px;text-align:center;display:flex;flex-direction:column;gap:2px}
+.wk-d b{font-size:20px;color:#c9a24d}.wk-d small,.wk-d i{font-size:11px;font-style:normal;opacity:.75}
+.wk-d em{font-style:normal;font-size:10px;line-height:1.2;opacity:.9}
+.wk-d.now{background:rgba(201,162,77,.2);border-color:#c9a24d}

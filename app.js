@@ -238,26 +238,38 @@ function renderLiuNian(){
     <p><small>流年以每年生日為換年點，並以今天的日期為基準。</small></p>
     ${detail("目前流年",Yc,n0)}${detail("下一個流年",Yc+1,n1)}</div>`+renderLiuMonthWeek(now,Yc,n0);
 }
-// 流月＝流年數＋該「西曆月份」化約；流週＝流月數＋該週「週一的日期」化約（週的算法無統一標準，為通用推演）
+// 算法依網路上通行的數字能量教學：流月＝流年數＋西曆月份；流日＝流月數＋日期；皆化約成 1～9。
+// 流年以生日換年（生日未到用前一年）。流週沒有通行標準：本站把該週七天的流日並列，並以該月流月數為本週底色。
 const red9=n=>{while(n>9)n=digitSum(n);return n};
 function renderLiuMonthWeek(now,Yc,n0){
-  const M=(y,m)=>red9(n0+red9(m+1));              // m: 0~11
-  const mk=(d)=>({y:d.getFullYear(),m:d.getMonth()});
-  const nm=new Date(now.getFullYear(),now.getMonth()+1,1);
-  const mon=d=>{const x=new Date(d.getFullYear(),d.getMonth(),d.getDate()-((d.getDay()+6)%7));return x};
-  const w0=mon(now),w1=new Date(w0.getFullYear(),w0.getMonth(),w0.getDate()+7);
-  const W=(ws)=>red9(M(ws.getFullYear(),ws.getMonth())+red9(ws.getDate()));
-  const D=n=>LN_DETAIL[n];
-  const mbox=(t,d)=>{const n=M(d.y,d.m);return`<div class="ln-box"><div class="ln-t">${t}</div><div class="ln-y">${d.y}/${String(d.m+1).padStart(2,"0")}</div><div class="ln-n">${n}</div><div class="ln-p">${D(n).key}</div></div>`};
-  const wbox=(t,ws)=>{const n=W(ws),we=new Date(ws.getFullYear(),ws.getMonth(),ws.getDate()+6);return`<div class="ln-box"><div class="ln-t">${t}</div><div class="ln-y">${fmtD(ws).slice(5)}～${fmtD(we).slice(5)}</div><div class="ln-n">${n}</div><div class="ln-p">${D(n).key}</div></div>`};
-  const tip=(label,n)=>`<h5>${label}・數字 ${n}（${D(n).key}）</h5><p>${D(n).advice}</p><div class="ln-dd"><div class="y"><b>適合</b><ul>${D(n).yes.map(x=>`<li>${x}</li>`).join("")}</ul></div><div class="n"><b>避免</b><ul>${D(n).no.map(x=>`<li>${x}</li>`).join("")}</ul></div></div>`;
-  const cm=mk(now),nmm=mk(nm);
-  const mDetail=gateBlock(1,{label:"流月詳細建議",sections:["本月重點與適合避免","下個月重點與適合避免"],html:`<div class="ln-detail">${tip("本月",M(cm.y,cm.m))}${tip("下個月",M(nmm.y,nmm.m))}</div>`});
-  const wDetail=gateBlock(1,{label:"流週詳細建議",sections:["本週重點與適合避免","下週重點與適合避免"],html:`<div class="ln-detail">${tip("本週",W(w0))}${tip("下週",W(w1))}</div>`});
-  return`<div class="card"><h3>流月</h3><div class="ln-grid">${mbox("本月",cm)}${mbox("下個月",nmm)}</div>
-    <p><small>算法：流年數＋西曆月份，化約成 1～9。</small></p>${mDetail}</div>
-  <div class="card"><h3>流週</h3><div class="ln-grid">${wbox("本週",w0)}${wbox("下週",w1)}</div>
-    <p><small>算法：該月流月數＋該週週一的日期數，化約成 1～9（每週從週一算起；週的算法沒有統一標準，僅供參考）。</small></p>${wDetail}</div>`;
+  const M=(y,m)=>red9(n0+red9(m+1));                  // m: 0~11
+  const DAY=d=>red9(M(d.getFullYear(),d.getMonth())+red9(d.getDate()));
+  const addD=(d,k)=>new Date(d.getFullYear(),d.getMonth(),d.getDate()+k);
+  const w0=addD(now,-((now.getDay()+6)%7)),w1=addD(w0,7);          // 週一～週日
+  const cm={y:now.getFullYear(),m:now.getMonth()},nx=new Date(now.getFullYear(),now.getMonth()+1,1),nm={y:nx.getFullYear(),m:nx.getMonth()};
+  const mbox=(t,d)=>{const n=M(d.y,d.m);return`<div class="ln-box"><div class="ln-t">${t}</div><div class="ln-y">${d.y}/${String(d.m+1).padStart(2,"0")}</div><div class="ln-n">${n}</div><div class="ln-p">${LN_DETAIL[n].key}</div></div>`};
+  const mtip=(label,d)=>{const n=M(d.y,d.m),D=LN_DETAIL[n],L=LM_DETAIL[n];
+    return`<h5>${label}・流月 ${n}（${D.key}）</h5><div class="ln-story"><div class="ln-story-t">一個情境故事</div>${L.story}</div>
+    <h5>給你的建議</h5><p class="ln-adv">${L.advice}</p>
+    <div class="ln-dd"><div class="y"><b>適合</b><ul>${D.yes.map(x=>`<li>${x}</li>`).join("")}</ul></div><div class="n"><b>避免</b><ul>${D.no.map(x=>`<li>${x}</li>`).join("")}</ul></div></div>`};
+  const wk=ws=>Array.from({length:7},(_,i)=>{const d=addD(ws,i),n=DAY(d),today=fmtD(d)===fmtD(now);
+    return`<div class="wk-d${today?" now":""}"><small>${"一二三四五六日"[i]}</small><b>${n}</b><i>${d.getMonth()+1}/${d.getDate()}</i><em>${LD_KEY[n]}</em></div>`}).join("");
+  const wtip=(label,ws)=>{const n=M(ws.getFullYear(),ws.getMonth()),L=LW_DETAIL[n];
+    const days=Array.from({length:7},(_,i)=>({d:addD(ws,i),n:DAY(addD(ws,i))}));
+    const best=days.filter(x=>[1,3,8].includes(x.n)).map(x=>`${x.d.getMonth()+1}/${x.d.getDate()}（${x.n}）`).join("、")||"本週沒有特別突出的行動日，穩穩做就好";
+    const calm=days.filter(x=>[4,7,9].includes(x.n)).map(x=>`${x.d.getMonth()+1}/${x.d.getDate()}（${x.n}）`).join("、")||"—";
+    return`<h5>${label}・底色（流月 ${n}：${LN_DETAIL[n].key}）</h5><div class="ln-story"><div class="ln-story-t">一個情境故事</div>${L.story}</div>
+    <h5>給你的建議</h5><p class="ln-adv">${L.advice}</p>
+    <p><b>適合出擊的日子：</b>${best}<br><b>適合沉澱整理的日子：</b>${calm}</p>`};
+  const mDetail=gateBlock(1,{label:"流月詳細解析",sections:["本月：故事、建議、適合與避免","下個月：故事、建議、適合與避免"],html:`<div class="ln-detail">${mtip("本月",cm)}${mtip("下個月",nm)}</div>`});
+  const wDetail=gateBlock(1,{label:"流週詳細解析",sections:["本週底色：故事與建議","適合出擊與沉澱的日子"],html:`<div class="ln-detail">${wtip("本週",w0)}${wtip("下週",w1)}</div>`});
+  const wr=ws=>`${fmtD(ws).slice(5)}～${fmtD(addD(ws,6)).slice(5)}`;
+  return`<div class="card"><h3>流月</h3><div class="ln-grid">${mbox("本月",cm)}${mbox("下個月",nm)}</div>
+    <p><small>算法：流月＝流年數＋西曆月份，化約成 1～9。</small></p>${mDetail}</div>
+  <div class="card"><h3>流週</h3>
+    <p class="wk-t">本週　${wr(w0)}</p><div class="wk">${wk(w0)}</div>
+    <p class="wk-t">下週　${wr(w1)}</p><div class="wk">${wk(w1)}</div>
+    <p><small>每一天的數字是「流日」＝流月數＋日期，化約成 1～9（網路上通行算法）。流週沒有統一標準，本站以七天流日並列，並以該月流月數為週的底色。</small></p>${wDetail}</div>`;
 }
 
 // ========== 生命塔羅 ==========

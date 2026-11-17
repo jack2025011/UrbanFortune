@@ -57,6 +57,9 @@ function shensha(P,gender){          // P=[年,月,日,時] 每項 [干,支]
   const TD=[{b:5},{s:6},{s:3},{b:8},{s:8},{s:7},{b:11},{s:0},{s:9},{b:2},{s:2},{s:1}][mZ];
   const yued=[8,6,2,0][g4(mZ)];                 // 月德：申子辰壬、巳酉丑庚、寅午戌丙、亥卯未甲
   const inb=set=>(i,g,z)=>set.includes(z);
+  // 天羅：年柱或日柱的納音屬火，見戌、亥（地網未列，因對照命盤沒有出現）
+  const nyEl=(g,z)=>NAYIN[Math.floor(sexa(g,z)/2)].slice(-1);
+  const luo=(nyEl(yG,yZ)==="火"||nyEl(dG,dZ)==="火")?[10,11]:[];
   const rules=[
     ["天喜",inb([mod(9-yZ,12)])],
     ["福德",inb([mod(yZ+9,12)])],
@@ -71,17 +74,21 @@ function shensha(P,gender){          // P=[年,月,日,時] 每項 [干,支]
     ["金輿",inb([[4,5,7,8,7,8,10,11,1,2][dG]])],
     ["流霞",inb([[9,10,7,8,5,6,4,3,11,2][dG]])],
     ["災煞",inb([[6,3,0,9][g4(yZ)],[6,3,0,9][g4(dZ)]])],
-    ["月德合",(i,g)=>g===mod(yued+5,10)],
-    ["隔角",inb([mod(dZ+2,12)])],
     ["桃花",inb([[9,6,3,0][g4(yZ)],[9,6,3,0][g4(dZ)]])],
     ["驛馬",inb([[2,11,8,5][g4(yZ)],[2,11,8,5][g4(dZ)]])],
+    ["劫煞",inb([[5,2,11,8][g4(yZ)],[5,2,11,8][g4(dZ)]])],
     ["血刃",inb([xueren[mZ]])],
     ["孤辰",inb([[2,5,8,11][Math.floor(mod(yZ+1,12)/3)]])],
     ["學堂",inb([xuetang])],
     ["紅豔",inb([[6,6,2,7,4,4,10,9,0,8][dG]])],
+    ["天羅",inb(luo)],
     ["弔客",inb([mod(yZ-2,12)])],
     ["天醫",inb([mod(mZ-1,12)])],
+    ["月德合",(i,g)=>g===mod(yued+5,10)],
+    ["隔角",inb([mod(dZ+2,12)])],
     ["日破",(i,g,z)=>i===3&&z===mod(dZ+6,12)],
+    ["破碎",inb([mod(yZ+6,12)])],
+    ["大耗",inb([mod(yZ+6,12)])],
     ["飛刃",inb([feiren])],
     ["墓庫",(i,g,z)=>changsheng(dG,z)==="墓"],
     ["天乙",inb(tianyi[dG])],

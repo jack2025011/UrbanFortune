@@ -1,6 +1,7 @@
 const $=s=>document.querySelector(s);
 let S=null;      // {y,m,d,digits,mm,dd,hour}
 let LS=null;     // 生命靈數計算結果
+let TAROT_CUR=null,LN_CUR=null;   // 塔羅牌、流年（供人生分析使用）
 
 // ========== 第一頁：輸入 ==========
 $("#dob").addEventListener("input",e=>{
@@ -110,7 +111,7 @@ async function tryUnlock(){
   try{ok=(await sha256(PW_SALT+$("#lock-pw").value))===PW_HASH}catch(e){$("#lock-err").textContent="此瀏覽器不支援解鎖，請改用 Safari 或 Chrome";return}
   if(!ok){$("#lock-err").textContent="密碼錯誤";return}
   unlocked=true;try{sessionStorage.setItem("uf.unlock","1")}catch(e){}
-  applyUnlock();const b=pending;closeLock();if(b)doToggle(b);
+  applyUnlock();const b=pending;closeLock();if(typeof b==="function")b();else if(b)doToggle(b);
 }
 document.addEventListener("click",e=>{
   const b=e.target.closest(".toggle");if(!b)return;
@@ -129,7 +130,7 @@ function renderZiwei(){
   }
   $("#ziwei").innerHTML=ziweiHtml(S);
 }
-function renderAll(){renderNumerology();renderTarot();renderBazi();renderZiwei()}
+function renderAll(){BZ_CUR=null;Z_CUR=null;renderNumerology();renderTarot();renderBazi();renderZiwei()}
 
 // ========== 生命靈數 ==========
 const digitSum=s=>String(s).split("").reduce((a,b)=>a+ +b,0);
@@ -222,6 +223,7 @@ function renderLiuNian(){
   const Yc=now>=birthdayIn(Y)?Y:Y-1;
   const curStart=birthdayIn(Yc),nextStart=birthdayIn(Yc+1);
   const n0=liunianNum(Yc),n1=liunianNum(Yc+1);
+  LN_CUR={Yc,n0,n1};
   const box=(t,y,n,period)=>`<div class="ln-box"><div class="ln-t">${t}</div><div class="ln-y">${y} 年</div><div class="ln-n">${n}</div><div class="ln-p">${period}</div></div>`;
   const ana=(t,y,n)=>{const a=LIU_NIAN_ANALYSIS[n];return`<h4>${t}（${y}）流年 ${n}</h4><p><b>年度主題：</b>${a.theme}</p><p><b>建議：</b>${a.advice}</p>`};
   $("#liunian").innerHTML=`<div class="card"><h3>流年</h3>
@@ -246,6 +248,7 @@ function renderTarot(){
   const c={1:reduceTo22(S.d),2:subtract22(sy+sm+sd),3:subtract22(sy+S.m+S.d),4:c4,
     5:c4-1===0?22:c4-1,6:c4+1===23?1:c4+1,career:lp};
   const nm=n=>TAROT_MAP[n],key=n=>TAROT_MAP[n].split(" ")[0];
+  TAROT_CUR={c,key};
   const labels={1:"1. 個性塔羅",2:"2. 愛情塔羅",3:"3. 靈魂塔羅",4:"4. 潛能塔羅",5:"5. 配牌 1",6:"6. 配牌 2"};
   $("#tarot-grid").innerHTML=[1,2,3,4,5,6].map(i=>
     `<div class="tarot-card-display"><strong>${labels[i]}</strong><span class="number">${c[i]}</span><span class="name">${key(c[i])}</span></div>`).join("");

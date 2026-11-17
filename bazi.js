@@ -162,6 +162,7 @@ function calcBazi(y,m,d,hz){
 const WXC={木:"wxm",火:"wxh",土:"wxt",金:"wxj",水:"wxs"};
 const fmtTerm=(n,jd)=>{const t=fromJd(jd);return`${n} (${t.d}日${t.h}時${String(t.mi).padStart(2,"0")}分)`};
 const gz=([g,z])=>`${GAN[g]}${ZHI[z]}`;
+let BZ_CUR=null;            // 最近一次八字的整理結果（供人生分析使用）
 function baziHtml(S,hz){
   const R=calcBazi(S.y,S.m,S.d,hz),P=R.P,me=P[2][0];
   const order=[3,2,1,0];                                // 時、日、月、年
@@ -258,6 +259,7 @@ function baziHtml(S,hz){
     <div id="ss-detail" class="hidden"><div class="card"><h3>各柱位置的意義</h3>${posLegend}</div>
     <div class="card"><h3>十神解析</h3>${analysis}
     <p class="note">以上為十神的一般性說明，依日主「${GAN[me]}${GAN_WX[me]}」計算；同一個十神出現在不同柱，意義會不同。實際強弱還要看月令、合沖與大運，僅供參考。</p></div>${shaCard}</div>`;
+  BZ_CUR={P,me,ss,cnt,lack,cntS,posS,score,helpScore,strong,yong,ji,status,mw};
   return`<div class="card"><h3>命盤</h3>${table}</div>${info}${wxCard}${anaCard}
     <p class="note">節氣由太陽位置推算，誤差約十分鐘內；出生在節氣交接當天請以萬年曆為準。時間取該時辰的起始整點。</p>`;
 }

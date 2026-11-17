@@ -49,7 +49,7 @@ $("#save").onclick=()=>{
   let list=loadHist();
   const i=list.findIndex(x=>x.name===item.name&&x.dob===item.dob&&x.hour===item.hour&&(x.gender||null)===item.gender);
   if(i>=0)list.splice(i,1);                      // 相同資料就更新到最前面
-  else{const limit=[1,5,Infinity,Infinity][planLevel()];
+  else{const limit=[1,5,Infinity,Infinity,Infinity][planLevel()];
     if(list.length>=limit)return msg(`目前方案最多儲存 ${limit} 筆，升級「入門 68」可儲存 5 筆、「進階 168」不限筆數`)}
   list.unshift(item);
   if(!saveHist(list))return msg("這個瀏覽器無法儲存（可能是無痕模式）");
@@ -130,7 +130,7 @@ function renderZiwei(){
       <p style="text-align:center"><small>紫微斗數需要出生時辰，請按上方「返回修改」補填。</small></p></div>`;
     return;
   }
-  if(!entitled(2)){$("#ziwei").innerHTML=gateChartTeaser(2,"紫微斗數命盤與解析",["命盤：十二宮、主星與輔星、四化","大限與流年小限","紫微解析"]);return}
+  if(!entitled(1)){$("#ziwei").innerHTML=gateChartTeaser(1,"紫微斗數命盤",["命盤：十二宮、主星與輔星、四化","大限與流年小限"]);return}
   $("#ziwei").innerHTML=ziweiHtml(S);
 }
 function renderAll(){BZ_CUR=null;Z_CUR=null;renderNumerology();renderTarot();renderBazi();renderZiwei();if(typeof updateGateButtons==="function")updateGateButtons()}
@@ -189,7 +189,7 @@ function renderNumerology(){
   <div class="card"><h3>🔗 九宮連線（天賦連線）解析</h3>
     <p>以下是命盤中擁有的天賦連線。連線完整代表天生擁有該特質的能量組。</p>
     <ul class="connection-list">${conns||"<li>九宮格未形成任何一條完整的連線。</li>"}</ul></div>`;
-  $("#ls-gate").innerHTML=gateBlock(1,{id:"ls-detail",toggle:"詳細解析",label:"生命靈數詳細解析",sections:["主命數解析","先天數與後天數","九宮連線（天賦連線）解析"],html:lsDetailHtml});
+  $("#ls-gate").innerHTML=gateBlock(2,{id:"ls-detail",toggle:"詳細解析",label:"生命靈數詳細解析",sections:["主命數解析","先天數與後天數","九宮連線（天賦連線）解析"],html:lsDetailHtml});
 
   renderLiuNian();
 }
@@ -230,13 +230,14 @@ function renderLiuNian(){
   LN_CUR={Yc,n0,n1};
   const box=(t,y,n,period)=>`<div class="ln-box"><div class="ln-t">${t}</div><div class="ln-y">${y} 年</div><div class="ln-n">${n}</div><div class="ln-p">${period}</div></div>`;
   const detail=(label,y,n)=>gateBlock(1,{label:`${label}詳細解析`,sections:LN_SECTIONS,html:liunianDetailHtml(label,y,n)});
-  $("#liunian").innerHTML=`<div class="card"><h3>流年</h3>
+  const lnCard=`<div class="card"><h3>流年</h3>
     <div class="ln-grid">
       ${box("目前流年",Yc,n0,`${fmtD(curStart)}<br>～ ${fmtD(dayBefore(nextStart))}`)}
       ${box("下一個流年",Yc+1,n1,`${fmtD(nextStart)}<br>起開始`)}
     </div>
     <p><small>流年以每年生日為換年點，並以今天的日期為基準。</small></p>
-    ${detail("目前流年",Yc,n0)}${detail("下一個流年",Yc+1,n1)}</div>`+renderLiuMonthWeek(now,Yc,n0);
+    ${detail("目前流年",Yc,n0)}${detail("下一個流年",Yc+1,n1)}</div>`;
+  $("#liunian").innerHTML=(entitled(1)?lnCard:gateTeaser(1,"流年與流年解析",["目前流年與下一個流年","年度主題","事業、感情、健康與節奏"]))+renderLiuMonthWeek(now,Yc,n0);
 }
 // 算法依網路上通行的數字能量教學：流月＝流年數＋西曆月份；流日＝流月數＋日期；皆化約成 1～9。
 // 流年以生日換年（生日未到用前一年）。流週沒有通行標準：本站把該週七天的流日並列，並以該月流月數為本週底色。
@@ -258,13 +259,14 @@ function renderLiuMonthWeek(now,Yc,n0){
     <div class="ln-dd"><div class="y"><b>適合</b><ul>${D.yes.map(x=>`<li>${x}</li>`).join("")}</ul></div><div class="n"><b>避免</b><ul>${D.no.map(x=>`<li>${x}</li>`).join("")}</ul></div></div>`};
   const strip=Array.from({length:7},(_,i)=>{const d=addD(now,i),n=DAY(d);
     return`<div class="wk-d${i===0?" now":""}"><small>${"日一二三四五六"[d.getDay()]}</small><b>${n}</b><i>${d.getMonth()+1}/${d.getDate()}</i><em>${LD_KEY[n]}</em></div>`}).join("");
-  const mDetail=gateBlock(1,{label:"流月詳細解析",sections:["本月：白話說明、建議、適合與避免","下個月：白話說明、建議、適合與避免"],html:`<div class="ln-detail">${mtip("本月",cm)}${mtip("下個月",nm)}</div>`});
-  const dDetail=gateBlock(1,{label:"流日詳細解析",sections:["今天：白話說明與建議","明天：白話說明與建議"],html:`<div class="ln-detail">${dtip("今天",now)}${dtip("明天",addD(now,1))}</div>`});
-  return`<div class="card"><h3>流月</h3><div class="ln-grid">${mbox("本月",cm)}${mbox("下個月",nm)}</div>
-    <p><small>算法：流月＝流年數＋西曆月份，化約成 1～9。</small></p>${mDetail}</div>
-  <div class="card"><h3>流日</h3><div class="ln-grid">${dbox("今天",now)}${dbox("明天",addD(now,1))}</div>
+  const mDetail=gateBlock(2,{label:"流月詳細解析",sections:["本月：白話說明、建議、適合與避免","下個月：白話說明、建議、適合與避免"],html:`<div class="ln-detail">${mtip("本月",cm)}${mtip("下個月",nm)}</div>`});
+  const dDetail=gateBlock(3,{label:"流日詳細解析",sections:["今天：白話說明與建議","明天：白話說明與建議"],html:`<div class="ln-detail">${dtip("今天",now)}${dtip("明天",addD(now,1))}</div>`});
+  const monthCard=`<div class="card"><h3>流月</h3><div class="ln-grid">${mbox("本月",cm)}${mbox("下個月",nm)}</div>
+    <p><small>算法：流月＝流年數＋西曆月份，化約成 1～9。</small></p>${mDetail}</div>`;
+  const dayCard=`<div class="card"><h3>流日</h3><div class="ln-grid">${dbox("今天",now)}${dbox("明天",addD(now,1))}</div>
     <p class="wk-t">未來七天</p><div class="wk">${strip}</div>
     <p><small>算法：流日＝流月數＋日期，化約成 1～9。</small></p>${dDetail}</div>`;
+  return(entitled(1)?monthCard:gateTeaser(1,"流月",["本月與下個月的流月數"]))+(entitled(2)?dayCard:gateTeaser(2,"流日",["今天、明天與未來七天的流日數"]));
 }
 
 // ========== 生命塔羅 ==========
@@ -305,7 +307,7 @@ function renderTarot(){
   for(const k in COMBINATION_DATA)if(k.includes("+")&&k.split("+").every(p=>uniq.includes(p)))
     combo+=`<p><strong>【組合：${k}】</strong>：${COMBINATION_DATA[k]}</p>`;
   if(combo)html+=`<div class="card analysis"><h3>✨ 特殊牌組合</h3>${combo}</div>`;
-  $("#tarot-gate").innerHTML=gateBlock(1,{id:"tarot-detail",toggle:"詳細解析",label:"生命塔羅詳細解析",sections:["個性、靈魂、潛能與配牌","愛情塔羅：風格與弱點","事業塔羅：方向、禁忌與適合職務","特殊牌組合"],html});
+  $("#tarot-gate").innerHTML=gateBlock(2,{id:"tarot-detail",toggle:"詳細解析",label:"生命塔羅詳細解析",sections:["個性、靈魂、潛能與配牌","愛情塔羅：風格與弱點","事業塔羅：方向、禁忌與適合職務","特殊牌組合"],html});
 }
 
 // ========== 八字（計算在 bazi.js）==========
@@ -315,6 +317,7 @@ function renderBazi(){
       <p style="text-align:center"><small>八字需要出生時辰，請按上方「返回修改」補填。</small></p></div>`;
     return;
   }
-  $("#bazi").innerHTML=baziHtml(S,S.hour);
+  const html=baziHtml(S,S.hour);                       // 一律先算（人生分析會用到），沒權限只顯示霧面
+  $("#bazi").innerHTML=entitled(1)?html:gateChartTeaser(1,"八字命盤",["四柱、十神、藏干、納音","神煞與空亡","基本資料、五行與身強身弱"]);
 }
 if(typeof adminChanged==="function")adminChanged();   // 重新整理後仍在管理者模式時，顯示預覽列

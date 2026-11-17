@@ -2,12 +2,13 @@
 // 注意：目前還沒有會員與金流，這裡只是「依方案顯示不同內容」的畫面原型。
 // 管理者輸入密碼後，可直接預覽各個方案看到的內容。要真正收費，付費內容必須放在伺服器端依會員權限提供。
 const PLANS=[
-  {lv:0,name:"免費版",price:"免費",feat:["生命靈數命盤與九宮格","生命塔羅六張牌與事業牌","流年數字與起訖日","八字四柱（主星、天干地支、藏干、納音）","農曆"]},
-  {lv:1,name:"入門",price:"NT$68／月",feat:["生命靈數詳細解析","生命塔羅詳細解析","流年、流月、流日詳細解析","八字完整命盤表（副星、星運、空亡、神煞）","基本資料與五行十神統計","歷史儲存 5 筆"]},
-  {lv:2,name:"進階",price:"NT$168／月",feat:["八字十神與神煞解析","紫微斗數命盤與解析","大限人生階段（人生分析內）","列印 A4／存成圖片","歷史儲存不限筆數"]},
-  {lv:3,name:"專業",price:"NT$888／月",feat:["人生分析：八字、紫微、靈數、塔羅交叉對比","多人命盤管理（即將推出）","自訂品牌的報告（即將推出）","批次產生報告（即將推出）"]}];
-let ADMIN_PREVIEW=3;
-try{const v=sessionStorage.getItem("uf.preview");if(v!==null&&+v>=0&&+v<=3)ADMIN_PREVIEW=+v}catch(e){}
+  {lv:0,name:"免費版",price:"免費",feat:["生命靈數命盤與九宮格","生命塔羅命盤（六張牌與事業牌）","農曆"]},
+  {lv:1,name:"入門",price:"NT$68／月",feat:["八字命盤","紫微斗數命盤","流年與流年解析","流月","歷史儲存 5 筆"]},
+  {lv:2,name:"進階",price:"NT$168／月",feat:["生命靈數解析","生命塔羅解析","流月解析","流日","歷史儲存不限筆數"]},
+  {lv:3,name:"專業",price:"NT$268／月",feat:["八字解析（十神與神煞）","紫微斗數解析","流日解析"]},
+  {lv:4,name:"大師",price:"NT$888／月",feat:["人生分析圖（八字、紫微、靈數、塔羅交叉對比）","列印、下載命盤圖片","全部功能開放"]}];
+let ADMIN_PREVIEW=4;
+try{const v=sessionStorage.getItem("uf.preview");if(v!==null&&+v>=0&&+v<=4)ADMIN_PREVIEW=+v}catch(e){}
 // 目前方案：管理者看「預覽的方案」；一般訪客目前一律是免費版（尚未有會員）
 function planLevel(){return(typeof unlocked!=="undefined"&&unlocked)?ADMIN_PREVIEW:0}
 const entitled=min=>planLevel()>=min;
@@ -61,8 +62,8 @@ function refreshView(){
 }
 function updateGateButtons(){
   const life=document.getElementById("life-btn"),pr=document.getElementById("print-btn");
-  if(life)life.textContent="✦ 人生分析"+(entitled(3)?"":" 🔒");
-  if(pr)pr.textContent="🖨 列印"+(entitled(2)?"":" 🔒");
+  if(life)life.textContent="✦ 人生分析"+(entitled(4)?"":" 🔒");
+  if(pr)pr.textContent="🖨 列印"+(entitled(4)?"":" 🔒");
 }
 function adminChanged(){
   const bar=document.getElementById("admin-bar"),on=(typeof unlocked!=="undefined"&&unlocked);

@@ -314,7 +314,7 @@ function openLife(){
 }
 function closeLife(){document.getElementById("life").hidden=true;document.body.classList.remove("po-open")}
 document.getElementById("life-btn").onclick=()=>{
-  if(!entitled(3)){openPlans(3,"人生分析");return}
+  if(!entitled(4)){openPlans(4,"人生分析");return}
   openLife();
 };
 document.getElementById("lf-close").onclick=closeLife;

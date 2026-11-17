@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>URBAN 命理</title>
-<link rel="stylesheet" href="style.css?v=202611170213">
+<link rel="stylesheet" href="style.css?v=202611170243">
 </head>
 <body>
 
@@ -59,6 +59,7 @@
 <div id="v-result" class="view">
   <div class="app-bar">URBAN 命理<small>✦ 星象・數字・命盤 ✦</small></div>
   <div class="content">
+    <div class="print-row"><button id="print-btn" type="button" class="ghost-sm">🖨 列印</button></div>
     <div class="card info">
       <div><div id="i-name-row"><span id="i-name-wrap">姓名：<strong id="i-name"></strong>　</span><span id="i-gender-wrap">性別：<strong id="i-gender"></strong></span></div>生日：<strong id="i-dob"></strong>　時辰：<strong id="i-sc"></strong><div id="i-lunar-row">農曆：<strong id="i-lunar"></strong></div></div>
       <button class="back" id="back">返回修改</button>
@@ -127,11 +128,17 @@
   </div>
 </div>
 
+<div id="po" class="po" hidden>
+  <div class="po-bar"><button id="po-print" type="button" class="po-b main">列印 / 存成 PDF</button><button id="po-close" type="button" class="po-b">關閉</button></div>
+  <div class="po-scroll"><div id="po-box" class="sheet-box"><div id="po-sheet" class="sheet"></div></div></div>
+</div>
+
 <footer>僅供娛樂參考，不構成任何決策建議。</footer>
-<script src="data.js?v=202611170213"></script>
-<script src="bazi.js?v=202611170213"></script>
-<script src="lunar.js?v=202611170213"></script>
-<script src="ziwei.js?v=202611170213"></script>
-<script src="app.js?v=202611170213"></script>
+<script src="data.js?v=202611170243"></script>
+<script src="bazi.js?v=202611170243"></script>
+<script src="lunar.js?v=202611170243"></script>
+<script src="ziwei.js?v=202611170243"></script>
+<script src="print.js?v=202611170243"></script>
+<script src="app.js?v=202611170243"></script>
 </body>
 </html>

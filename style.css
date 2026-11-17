@@ -82,7 +82,7 @@ select option{background:#17123a;color:var(--text)}
 .connection-line{stroke:var(--gold);stroke-width:3;stroke-linecap:round;filter:drop-shadow(0 0 4px rgba(226,191,107,.7))}
 .legend{text-align:center;font-size:13px;color:var(--sub)}
 .lg{display:inline-block;width:12px;height:12px;vertical-align:middle;margin-right:2px}
-.lg.o{border:2px solid #ffa94d;border-radius:50%}.lg.t{border:2px solid red;border-radius:2px}.lg.s{border:2px solid #5fd35f}
+.lg.o{border:2px solid #ffa94d;border-radius:50%}.lg.t{width:14px;height:14px;border:0;vertical-align:-2px;background:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MCA1MCI+PHBvbHlnb24gcG9pbnRzPSIyNSwzIDEsNDcgNDksNDciIHN0eWxlPSJmaWxsOm5vbmU7c3Ryb2tlOnJlZDtzdHJva2Utd2lkdGg6M3B4Ii8+PC9zdmc+") no-repeat center/contain}.lg.s{border:2px solid #5fd35f}
 .result-number{font-family:var(--serif);font-size:40px;font-weight:900;color:var(--gold);text-align:center;line-height:1.2;margin-bottom:10px;text-shadow:0 0 16px rgba(226,191,107,.4)}
 .result-number small{display:block;font-size:13px;color:var(--sub);font-weight:400;letter-spacing:.2em;text-shadow:none}
 .connection-list{list-style:none;padding:0;margin:0}
@@ -296,7 +296,7 @@ body.unlocked .toggle[data-lock]::before{content:"✦ "}
 .sh-lsn{flex:1;display:flex;flex-direction:column;gap:3px}
 .sh-leg{font-size:9.5px;color:var(--muted);margin-top:4px}
 .sh-leg i{display:inline-block;width:9px;height:9px;vertical-align:-1px;margin-right:2px}
-.sh-leg .o{border:1.6px solid #e08a00;border-radius:50%}.sh-leg .t{border:1.6px solid #d02828}.sh-leg .s{border:1.6px solid #1f8a2f}
+.sh-leg .o{border:1.6px solid #e08a00;border-radius:50%}.sh-leg .t{width:11px;height:11px;border:0;vertical-align:-2px;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 50 50'><polygon points='25,4 2,46 48,46' fill='none' stroke='%23d02828' stroke-width='6'/></svg>") no-repeat center/contain}.sh-leg .s{border:1.6px solid #1f8a2f}
 .sh-lns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .sh-ln{border:1px solid var(--rule);background:#fffaf0;text-align:center;padding:4px 2px}
 .sh-ln-t{font-size:10px;color:var(--muted)}

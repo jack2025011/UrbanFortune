@@ -466,3 +466,4 @@ body.is-admin{padding-bottom:56px}
 .wk-d b{font-size:20px;color:#c9a24d}.wk-d small,.wk-d i{font-size:11px;font-style:normal;opacity:.75}
 .wk-d em{font-style:normal;font-size:10px;line-height:1.2;opacity:.9}
 .wk-d.now{background:rgba(201,162,77,.2);border-color:#c9a24d}
+#admin-link{display:inline-block;margin-top:10px;padding:8px 20px;border:1px solid #c9a24d;border-radius:20px;color:#c9a24d;opacity:1;font-size:14px;text-decoration:none}

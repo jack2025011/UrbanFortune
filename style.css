@@ -196,3 +196,5 @@ body.unlocked .toggle[data-lock]::before{content:"✦ "}
 .zcc-b{color:var(--gold);font-weight:700;font-size:14px}
 .aux-line,.sh-line{font-size:13px;color:var(--sub)}.sh-line{color:#ffc24d}
 .zd{font-size:13px;color:#c7b8ff}
+.zp{display:block;margin-top:3px;font-size:14px;color:var(--gold);background:rgba(226,191,107,.08);border-left:3px solid var(--gold2);border-radius:4px;padding:4px 8px}
+.aux-line p{margin:6px 0;font-size:14px}

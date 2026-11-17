@@ -73,7 +73,7 @@ function openPrint(){
 function closePrint(){backToSheet();document.getElementById("po").hidden=true;document.body.classList.remove("po-open")}
 
 // ---------- 存成圖片（長按可存相簿；也可下載、分享）----------
-let PIC_URL="",PIC_NAME="URBAN命盤.png";
+let PIC_URL="",PIC_NAME="URBAN命盤.png",PIC_FILE=null;
 const $id=i=>document.getElementById(i);
 function loadH2C(){
   return new Promise((res,rej)=>{
@@ -96,10 +96,10 @@ async function makeImage(){
     holder.appendChild(clone);document.body.appendChild(holder);
     const canvas=await html2canvas(clone,{scale:2,width:794,height:1123,windowWidth:794,backgroundColor:"#fffdf7",useCORS:true,logging:false});
     PIC_URL=canvas.toDataURL("image/png");PIC_NAME=safeName();
+    try{const bin=atob(PIC_URL.split(",")[1]),u8=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)u8[i]=bin.charCodeAt(i);PIC_FILE=new File([u8],PIC_NAME,{type:"image/png"})}catch(e){PIC_FILE=null}
     $id("po-pic").src=PIC_URL;
     $id("po-box").hidden=true;$id("po-result").hidden=false;
     $id("po-bar-main").hidden=true;$id("po-bar-img").hidden=false;
-    $id("po-share").hidden=!(navigator.canShare&&navigator.share);
     document.querySelector(".po-scroll").scrollTop=0;
   }catch(e){alert("產生圖片失敗："+(e&&e.message||e)+"\n可以改用「列印 / PDF」，或用手機截圖。")}
   finally{if(holder)holder.remove();btn.disabled=false;btn.textContent=old}
@@ -108,18 +108,21 @@ function backToSheet(){
   $id("po-result").hidden=true;$id("po-box").hidden=false;
   $id("po-bar-img").hidden=true;$id("po-bar-main").hidden=false;
 }
-async function dataUrlToFile(){const b=await (await fetch(PIC_URL)).blob();return new File([b],PIC_NAME,{type:"image/png"})}
 $id("po-img").onclick=makeImage;
 $id("po-back").onclick=backToSheet;
 $id("po-dl").onclick=async()=>{
+  // 手機：開啟系統分享選單（可「儲存影像」、存到檔案、傳給朋友）
+  try{
+    if(PIC_FILE&&navigator.share&&navigator.canShare&&navigator.canShare({files:[PIC_FILE]})){
+      await navigator.share({files:[PIC_FILE],title:"URBAN 命盤"});return;
+    }
+  }catch(e){if(e&&e.name==="AbortError")return;}   // 使用者取消就結束；其他錯誤改走下載
+  // 電腦或不支援分享的瀏覽器：直接下載
   const blob=await (await fetch(PIC_URL)).blob(),u=URL.createObjectURL(blob);
   const a=document.createElement("a");a.href=u;a.download=PIC_NAME;document.body.appendChild(a);a.click();a.remove();
   setTimeout(()=>URL.revokeObjectURL(u),4000);
 };
-$id("po-share").onclick=async()=>{
-  try{const f=await dataUrlToFile();if(navigator.canShare({files:[f]}))await navigator.share({files:[f],title:"URBAN 命盤"})}
-  catch(e){if(e&&e.name!=="AbortError")alert("無法開啟分享，請改用長按圖片儲存")}
-};
+
 document.getElementById("print-btn").onclick=openPrint;
 document.getElementById("po-close").onclick=closePrint;
 document.getElementById("po-print").onclick=()=>window.print();

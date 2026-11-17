@@ -121,7 +121,15 @@ $("#lock-ok").onclick=tryUnlock;
 $("#lock-cancel").onclick=closeLock;
 $("#lock-pw").addEventListener("keydown",e=>{if(e.key==="Enter")tryUnlock()});
 $("#lock").addEventListener("click",e=>{if(e.target.id==="lock")closeLock()});
-function renderAll(){renderNumerology();renderTarot();renderBazi()}
+function renderZiwei(){
+  if(S.hour===null){
+    $("#ziwei").innerHTML=`<div class="card"><div class="need">請填寫時辰</div>
+      <p style="text-align:center"><small>紫微斗數需要出生時辰，請按上方「返回修改」補填。</small></p></div>`;
+    return;
+  }
+  $("#ziwei").innerHTML=ziweiHtml(S);
+}
+function renderAll(){renderNumerology();renderTarot();renderBazi();renderZiwei()}
 
 // ========== 生命靈數 ==========
 const digitSum=s=>String(s).split("").reduce((a,b)=>a+ +b,0);

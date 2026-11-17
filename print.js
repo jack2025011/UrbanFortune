@@ -74,7 +74,7 @@ function fitSheet(){
 }
 function openPrint(){
   if(!S)return;
-  if(!entitled(2)){openPlans(2,"列印與存成圖片");return}
+  if(!entitled(4)){openPlans(4,"列印與存成圖片");return}
   document.getElementById("po-sheet").innerHTML=buildSheet();
   fitHeight();
   document.getElementById("po").hidden=false;document.body.classList.add("po-open");

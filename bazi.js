@@ -265,7 +265,7 @@ function baziHtml(S,hz){
   BZ_CUR={P,me,ss,cnt,lack,cntS,posS,score,helpScore,strong,yong,ji,status,mw};
   const infoG=entitled(1)?info:gateTeaser(1,"基本資料",["節氣、人元司令","命宮、胎元、胎息、身宮","空亡"]);
   const wxG=entitled(1)?wxCard:gateTeaser(1,"五行與十神統計",["身強身弱與五行分數","參考用神與忌神","十神數量與旺相休囚死"]);
-  const anaG=entitled(2)?anaCard:gateTeaser(2,"十神與神煞解析",["各柱位置的意義","十神解析（依所在柱位）","神煞解析（依所在柱位）"]);
+  const anaG=entitled(3)?anaCard:gateTeaser(3,"十神與神煞解析",["各柱位置的意義","十神解析（依所在柱位）","神煞解析（依所在柱位）"]);
   return`<div class="card"><h3>命盤</h3>${table}</div>${infoG}${wxG}${anaG}
     <p class="note">節氣由太陽位置推算，誤差約十分鐘內；出生在節氣交接當天請以萬年曆為準。時間取該時辰的起始整點。</p>`;
 }

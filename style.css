@@ -241,7 +241,7 @@ body.unlocked .toggle[data-lock]::before{content:"✦ "}
 .sh-lines .wide{grid-column:1/-1}
 .sh-st{display:flex;gap:8px;margin:0 0 3px;font-size:11.5px;font-weight:700}
 .sh-st span{color:var(--muted);font-weight:500;min-width:4.6em;letter-spacing:.1em}
-.sh-foot{position:absolute;right:30px;bottom:19px;width:46%;text-align:right;font-size:9px;line-height:1.5;letter-spacing:.12em;color:var(--muted)}
+.sh-foot{position:absolute;right:30px;bottom:19px;width:40%;text-align:right;font-size:9px;line-height:1.5;letter-spacing:.12em;color:var(--muted)}
 
 /* 八字表（沿用畫面結構，換成紙張配色） */
 .sheet .mp{width:100%;border-collapse:collapse;font-size:10.5px;text-align:center}
@@ -480,6 +480,7 @@ body.is-vip #vip-chip{display:inline-block}
 .daily-n span{font-size:12px;opacity:.8}.daily-n b{font-size:56px;line-height:1.1;color:#f3d98a;text-shadow:0 0 14px rgba(224,184,79,.7)}.daily-n em{font-style:normal;font-weight:700}
 .daily-w{font-size:15px}
 .ver{opacity:.45;font-size:11px}
-/* 列印頁：流月、流日用緊湊的一行格 */
-.sh-ln.c{display:flex;align-items:center;justify-content:center;gap:6px;padding:3px 4px;white-space:nowrap}
-.sh-ln.c .sh-ln-t{font-size:9px}.sh-ln.c .sh-ln-n{font-size:17px;line-height:1.1}.sh-ln.c .sh-ln-p{font-size:9px}
+/* 列印頁：流年／流月／流日六格大小一致 */
+.sh-ln{padding:3px 2px;min-height:44px;display:flex;flex-direction:column;justify-content:center}
+.sh-ln-n{font-size:20px;line-height:1.1}
+.sh-ln-t,.sh-ln-p{font-size:9px;line-height:1.3}

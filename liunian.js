@@ -145,8 +145,8 @@ function dailyHtml(now,Yc,n0){
   let n=mon+now.getDate();while(n>9)n=digitSum(n);
   const doy=Math.floor((now-new Date(now.getFullYear(),0,0))/86400000);
   const D=LN_DETAIL[n];
-  return`<div class="card daily"><h3>✦ 今日建議</h3>
-    <p class="daily-d">${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()}　今天的流日數字：<b class="red">${n}</b>（${D.key}）</p>
+  return`<div class="card daily vip"><div class="vip-badge">👑 大師專屬</div><h3>今日建議</h3>
+    <div class="daily-n"><span>${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()}　今天的流日數字</span><b>${n}</b><em>${D.key}</em></div>
     <p class="ln-plain">${LN_PLAIN[n]}</p>
     <h5>今天可以這樣做</h5><p class="ln-adv">${DAILY_TIPS[n][doy%3]}</p>
     <div class="ln-dd"><div class="y"><b>適合</b><ul>${D.yes.map(x=>`<li>${x}</li>`).join("")}</ul></div><div class="n"><b>避免</b><ul>${D.no.map(x=>`<li>${x}</li>`).join("")}</ul></div></div>

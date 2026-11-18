@@ -479,3 +479,4 @@ body.is-vip #vip-chip{display:inline-block}
 .daily-n{display:flex;flex-direction:column;align-items:center;margin:6px 0 8px}
 .daily-n span{font-size:12px;opacity:.8}.daily-n b{font-size:56px;line-height:1.1;color:#f3d98a;text-shadow:0 0 14px rgba(224,184,79,.7)}.daily-n em{font-style:normal;font-weight:700}
 .daily-w{font-size:15px}
+.ver{opacity:.45;font-size:11px}

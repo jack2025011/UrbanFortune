@@ -248,25 +248,25 @@ function renderLiuMonthWeek(now,Yc,n0){
   const DAY=d=>red9(M(d.getFullYear(),d.getMonth())+red9(d.getDate()));
   const addD=(d,k)=>new Date(d.getFullYear(),d.getMonth(),d.getDate()+k);
   const cm={y:now.getFullYear(),m:now.getMonth()},nx=new Date(now.getFullYear(),now.getMonth()+1,1),nm={y:nx.getFullYear(),m:nx.getMonth()};
-  const mbox=(t,d)=>{const n=M(d.y,d.m);return`<div class="ln-box"><div class="ln-t">${t}</div><div class="ln-y">${d.y}/${String(d.m+1).padStart(2,"0")}</div><div class="ln-n">${n}</div><div class="ln-p">${LN_DETAIL[n].key}</div></div>`};
-  const mtip=(label,d)=>{const n=M(d.y,d.m),D=LN_DETAIL[n],L=LM_DETAIL[n];
-    return`<h5>${label}・流月 ${n}（${D.key}）</h5><p class="ln-plain">${LN_PLAIN[n]}</p>
+  const mbox=(t,d)=>{const n=M(d.y,d.m);return`<div class="ln-box"><div class="ln-t">${t}</div><div class="ln-y">${d.y}/${String(d.m+1).padStart(2,"0")}</div><div class="ln-n">${n}</div><div class="ln-p">${MONTH_INFO[n].key}</div></div>`};
+  const mtip=(label,d)=>{const n=M(d.y,d.m),D=MONTH_INFO[n],L=LM_DETAIL[n];
+    return`<h5>${label}・流月 ${n}（${D.key}）</h5><p class="ln-plain">${D.plain}</p>
     <h5>給你的建議</h5><p class="ln-adv">${L.advice}</p>
     <div class="ln-dd"><div class="y"><b>適合</b><ul>${D.yes.map(x=>`<li>${x}</li>`).join("")}</ul></div><div class="n"><b>避免</b><ul>${D.no.map(x=>`<li>${x}</li>`).join("")}</ul></div></div>`};
-  const dbox=(t,d)=>{const n=DAY(d);return`<div class="ln-box"><div class="ln-t">${t}</div><div class="ln-y">${fmtD(d).slice(5)}（${"日一二三四五六"[d.getDay()]}）</div><div class="ln-n">${n}</div><div class="ln-p">${LN_DETAIL[n].key}</div></div>`};
-  const dtip=(label,d)=>{const n=DAY(d),D=LN_DETAIL[n],L=LD_DETAIL[n];
-    return`<h5>${label}・流日 ${n}（${D.key}）</h5><p class="ln-plain">${LN_PLAIN[n]}</p>
+  const dbox=(t,d)=>{const n=DAY(d);return`<div class="ln-box"><div class="ln-t">${t}</div><div class="ln-y">${fmtD(d).slice(5)}（${"日一二三四五六"[d.getDay()]}）</div><div class="ln-n">${n}</div><div class="ln-p">${DAY_INFO[n].key}</div></div>`};
+  const dtip=(label,d)=>{const n=DAY(d),D=DAY_INFO[n],L=LD_DETAIL[n];
+    return`<h5>${label}・流日 ${n}（${D.key}）</h5><p class="ln-plain">${D.plain}</p>
     <h5>給你的建議</h5><p class="ln-adv">${L.advice}</p>
     <div class="ln-dd"><div class="y"><b>適合</b><ul>${D.yes.map(x=>`<li>${x}</li>`).join("")}</ul></div><div class="n"><b>避免</b><ul>${D.no.map(x=>`<li>${x}</li>`).join("")}</ul></div></div>`};
   const strip=Array.from({length:7},(_,i)=>{const d=addD(now,i),n=DAY(d);
-    return`<div class="wk-d${i===0?" now":""}"><small>${"日一二三四五六"[d.getDay()]}</small><b>${n}</b><i>${d.getMonth()+1}/${d.getDate()}</i><em>${LD_KEY[n]}</em></div>`}).join("");
+    return`<div class="wk-d${i===0?" now":""}"><small>${"日一二三四五六"[d.getDay()]}</small><b>${n}</b><i>${d.getMonth()+1}/${d.getDate()}</i><em>${DAY_INFO[n].key}</em></div>`}).join("");
   const mDetail=gateBlock(2,{label:"流月詳細解析",sections:["本月：白話說明、建議、適合與避免","下個月：白話說明、建議、適合與避免"],html:`<div class="ln-detail">${mtip("本月",cm)}${mtip("下個月",nm)}</div>`});
   const dDetail=gateBlock(3,{label:"流日詳細解析",sections:["今天：白話說明與建議","明天：白話說明與建議"],html:`<div class="ln-detail">${dtip("今天",now)}${dtip("明天",addD(now,1))}</div>`});
   const monthCard=`<div class="card"><h3>流月</h3><div class="ln-grid">${mbox("本月",cm)}${mbox("下個月",nm)}</div>
-    <p><small>算法：流月＝流年數＋西曆月份，化約成 1～9。</small></p>${mDetail}</div>`;
+    <p><small>算法：流月＝流年數＋西曆月份，化約成 1～9。流月看「這個月的步調」，一整年的大方向請看流年。</small></p>${mDetail}</div>`;
   const dayCard=`<div class="card"><h3>流日</h3><div class="ln-grid">${dbox("今天",now)}${dbox("明天",addD(now,1))}</div>
     <p class="wk-t">未來七天</p><div class="wk">${strip}</div>
-    <p><small>算法：流日＝流月數＋日期，化約成 1～9。</small></p>${dDetail}</div>`;
+    <p><small>算法：流日＝流月數＋日期，化約成 1～9。流日只看「今天可以做的小事與心情」，重大決定請以流年、流月為主。</small></p>${dDetail}</div>`;
   return(entitled(1)?monthCard:gateTeaser(1,"流月",["本月與下個月的流月數"]))+(entitled(2)?dayCard:gateTeaser(2,"流日",["今天、明天與未來七天的流日數"]));
 }
 

@@ -63,6 +63,7 @@ function refreshView(){
 function updateGateButtons(){
   const life=document.getElementById("life-btn"),pr=document.getElementById("print-btn");
   if(life)life.textContent="✦ 人生分析"+(entitled(4)?"":" 🔒");
+  document.body.classList.toggle("is-vip",entitled(4));
   if(pr)pr.textContent="🖨 列印"+(entitled(4)?"":" 🔒");
 }
 function adminChanged(){

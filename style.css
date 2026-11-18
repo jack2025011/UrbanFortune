@@ -469,3 +469,13 @@ body.is-admin{padding-bottom:56px}
 #admin-link{display:inline-block;margin-top:10px;padding:8px 20px;border:1px solid #c9a24d;border-radius:20px;color:#c9a24d;opacity:1;font-size:14px;text-decoration:none}
 .ln-plain{background:rgba(201,162,77,.12);border-left:3px solid #c9a24d;border-radius:6px;padding:8px 12px;margin:6px 0}
 .daily-d{margin:4px 0}.daily-w{margin-top:10px;padding:8px 12px;border-radius:8px;background:rgba(201,162,77,.15);text-align:center}
+/* 888 大師專屬 */
+#vip-chip{display:none;margin-top:4px;font-size:12px;color:#1c1326;background:linear-gradient(90deg,#f3d98a,#c9a24d);padding:2px 12px;border-radius:12px;font-weight:700}
+body.is-vip #vip-chip{display:inline-block}
+.vip-wrap,.card.daily.vip{position:relative;border:2px solid #e0b84f;border-radius:14px;box-shadow:0 0 18px rgba(224,184,79,.45);overflow:visible}
+.vip-wrap .gate{margin:0;border:0}
+.card.daily.vip{background:linear-gradient(160deg,rgba(224,184,79,.18),rgba(40,28,64,.9))}
+.vip-badge{position:absolute;top:-12px;right:14px;z-index:2;background:linear-gradient(90deg,#f3d98a,#c9a24d);color:#1c1326;font-size:12px;font-weight:700;padding:3px 12px;border-radius:12px}
+.daily-n{display:flex;flex-direction:column;align-items:center;margin:6px 0 8px}
+.daily-n span{font-size:12px;opacity:.8}.daily-n b{font-size:56px;line-height:1.1;color:#f3d98a;text-shadow:0 0 14px rgba(224,184,79,.7)}.daily-n em{font-style:normal;font-weight:700}
+.daily-w{font-size:15px}

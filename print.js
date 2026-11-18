@@ -49,8 +49,8 @@ function buildSheet(){
     <div class="sh-leg"><i class="o"></i>先天　<i class="t"></i>後天　<i class="s"></i>主命</div></div></div></div>`;
 
   // 流年
-  const lnBoxes=[...document.querySelectorAll("#liunian .ln-box")].slice(0,4).map(b=>`<div class="sh-ln"><div class="sh-ln-t">${esc(b.querySelector(".ln-t").textContent)}・${esc(b.querySelector(".ln-y").textContent)}</div><div class="sh-ln-n">${esc(b.querySelector(".ln-n").textContent)}</div><div class="sh-ln-p">${esc(b.querySelector(".ln-p").innerText.replace(/\n/g," "))}</div></div>`).join("");
-  const ln=`<div class="sh-sec"><div class="sh-t">流年</div><div class="sh-lns">${lnBoxes}</div></div>`;
+  const lnBoxes=[...document.querySelectorAll("#liunian .ln-box")].map((b,i)=>`<div class="sh-ln${i>=2?" c":""}"><div class="sh-ln-t">${esc(b.querySelector(".ln-t").textContent)}・${esc(b.querySelector(".ln-y").textContent)}</div><div class="sh-ln-n">${esc(b.querySelector(".ln-n").textContent)}</div><div class="sh-ln-p">${esc(b.querySelector(".ln-p").innerText.replace(/\n/g," "))}</div></div>`).join("");
+  const ln=`<div class="sh-sec"><div class="sh-t">流年・流月・流日</div><div class="sh-lns">${lnBoxes}</div></div>`;
 
   // 塔羅
   const cards=[...document.querySelectorAll("#tarot-grid .tarot-card-display")].map(c=>`<div class="sh-tc"><div class="sh-tc-l">${esc(c.querySelector("strong").textContent.replace(/^\d+\.\s*/,""))}</div><div class="sh-tc-n">${esc(c.querySelector(".number").textContent)}</div><div class="sh-tc-m">${esc(c.querySelector(".name").textContent)}</div></div>`).join("");

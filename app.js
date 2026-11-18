@@ -238,7 +238,7 @@ function renderLiuNian(){
     <p><small>流年以每年生日為換年點，並以今天的日期為基準。</small></p>
     ${detail("目前流年",Yc,n0)}${detail("下一個流年",Yc+1,n1)}</div>`;
   const dailyBlock=entitled(4)?dailyHtml(now,Yc,n0):`<div class="vip-wrap"><div class="vip-badge">👑 大師專屬</div>${gateTeaser(4,"每日專屬建議",["今天的流日數字與白話說明","今天可以這樣做","適合與避免、一句鼓勵的話"])}</div>`;
-  $("#liunian").innerHTML=dailyBlock+(entitled(1)?lnCard:gateTeaser(1,"流年與流年解析",["目前流年與下一個流年","年度主題","事業、感情、健康與節奏"]))+renderLiuMonthWeek(now,Yc,n0);
+  $("#liunian").innerHTML=dailyBlock+lnCard+renderLiuMonthWeek(now,Yc,n0);
 }
 // 算法依網路上通行的數字能量教學：流月＝流年數＋西曆月份；流日＝流月數＋日期；皆化約成 1～9。
 // 流年以生日換年（生日未到用前一年）。流週沒有通行標準：本站把該週七天的流日並列，並以該月流月數為本週底色。

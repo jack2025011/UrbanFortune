@@ -480,3 +480,6 @@ body.is-vip #vip-chip{display:inline-block}
 .daily-n span{font-size:12px;opacity:.8}.daily-n b{font-size:56px;line-height:1.1;color:#f3d98a;text-shadow:0 0 14px rgba(224,184,79,.7)}.daily-n em{font-style:normal;font-weight:700}
 .daily-w{font-size:15px}
 .ver{opacity:.45;font-size:11px}
+/* 列印頁：流月、流日用緊湊的一行格 */
+.sh-ln.c{display:flex;align-items:center;justify-content:center;gap:6px;padding:3px 4px;white-space:nowrap}
+.sh-ln.c .sh-ln-t{font-size:9px}.sh-ln.c .sh-ln-n{font-size:17px;line-height:1.1}.sh-ln.c .sh-ln-p{font-size:9px}

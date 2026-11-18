@@ -49,7 +49,7 @@ function buildSheet(){
     <div class="sh-leg"><i class="o"></i>先天　<i class="t"></i>後天　<i class="s"></i>主命</div></div></div></div>`;
 
   // 流年
-  const lnBoxes=[...document.querySelectorAll("#liunian .ln-box")].map(b=>`<div class="sh-ln"><div class="sh-ln-t">${esc(b.querySelector(".ln-t").textContent)}・${esc(b.querySelector(".ln-y").textContent)}</div><div class="sh-ln-n">${esc(b.querySelector(".ln-n").textContent)}</div><div class="sh-ln-p">${esc(b.querySelector(".ln-p").innerText.replace(/\n/g," "))}</div></div>`).join("");
+  const lnBoxes=[...document.querySelectorAll("#liunian .ln-box")].slice(0,4).map(b=>`<div class="sh-ln"><div class="sh-ln-t">${esc(b.querySelector(".ln-t").textContent)}・${esc(b.querySelector(".ln-y").textContent)}</div><div class="sh-ln-n">${esc(b.querySelector(".ln-n").textContent)}</div><div class="sh-ln-p">${esc(b.querySelector(".ln-p").innerText.replace(/\n/g," "))}</div></div>`).join("");
   const ln=`<div class="sh-sec"><div class="sh-t">流年</div><div class="sh-lns">${lnBoxes}</div></div>`;
 
   // 塔羅
@@ -58,7 +58,7 @@ function buildSheet(){
   const tarot=`<div class="sh-sec"><div class="sh-t">生命塔羅</div><div class="sh-tcs">${cards}</div><div class="sh-career"><span>事業塔羅</span>${career}</div></div>`;
 
   return`${head}<div class="sh-cols"><div class="sh-col">${bazi}${baziExtra}${ln}</div><div class="sh-col">${ziwei}${ls}${tarot}</div></div>
-    <div class="sh-foot">僅供娛樂參考，不構成任何決策建議　・　URBAN 命理</div>`;
+    <div class="sh-foot">僅供娛樂參考，不構成任何決策建議<br>URBAN 命理</div>`;
 }
 // 內容比紙張還高時，逐級收緊行距（神煞直排最多可到 11 行）
 function fitHeight(){

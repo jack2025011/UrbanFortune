@@ -304,7 +304,7 @@ function lfLifeHtml(){
   const advHtml=`<div class="card lf-card"><h3>綜合建議</h3><ol class="lf-adv">${adv.map(a=>`<li>${lfEsc(a)}</li>`).join("")}</ol></div>`;
   const tail=`<p class="lf-note">這份分析由程式依八字、紫微、生命靈數、生命塔羅與流年的規則整合而成，用來協助自我了解與參考，不是真人批命，也不能取代醫療、法律、財務等專業意見。各派取法不同，結果可能與其他軟體略有差異。</p>`;
   const warn=hasT?"":`<div class="card lf-card"><p class="lf-none">目前沒有填寫時辰，所以只用「生命靈數、生命塔羅、流年數」做分析。回到第一頁補上時辰，就能加入八字與紫微，交叉對比會更完整。</p></div>`;
-  return warn+overview+crossCard+domCards+decHtml+yrHtml+advHtml+tail;
+  return warn+lfReadingHtml(cross)+`<details class="lf-more"><summary>📋 看分析依據（八字、紫微、靈數、塔羅的詳細對照）</summary>${overview}${crossCard}${domCards}${decHtml}${yrHtml}${advHtml}</details>`+tail;
 }
 function openLife(){
   if(!S)return;

@@ -49,7 +49,7 @@ function buildSheet(){
     <div class="sh-leg"><i class="o"></i>先天　<i class="t"></i>後天　<i class="s"></i>主命</div></div></div></div>`;
 
   // 流年
-  const lnBoxes=[...document.querySelectorAll("#liunian .ln-box")].map((b,i)=>`<div class="sh-ln${i>=2?" c":""}"><div class="sh-ln-t">${esc(b.querySelector(".ln-t").textContent)}・${esc(b.querySelector(".ln-y").textContent)}</div><div class="sh-ln-n">${esc(b.querySelector(".ln-n").textContent)}</div><div class="sh-ln-p">${esc(b.querySelector(".ln-p").innerText.replace(/\n/g," "))}</div></div>`).join("");
+  const lnBoxes=[...document.querySelectorAll("#liunian .ln-box")].map((b,i)=>`<div class="sh-ln"><div class="sh-ln-t">${esc(b.querySelector(".ln-t").textContent)}・${esc(b.querySelector(".ln-y").textContent)}</div><div class="sh-ln-n">${esc(b.querySelector(".ln-n").textContent)}</div><div class="sh-ln-p">${esc(b.querySelector(".ln-p").innerText.replace(/\n/g," "))}</div></div>`).join("");
   const ln=`<div class="sh-sec"><div class="sh-t">流年・流月・流日</div><div class="sh-lns">${lnBoxes}</div></div>`;
 
   // 塔羅

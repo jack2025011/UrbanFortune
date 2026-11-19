@@ -133,7 +133,7 @@ function renderZiwei(){
   if(!entitled(1)){$("#ziwei").innerHTML=gateChartTeaser(1,"紫微斗數命盤",["命盤：十二宮、主星與輔星、四化","大限與流年小限"]);return}
   $("#ziwei").innerHTML=ziweiHtml(S);
 }
-function renderAll(){BZ_CUR=null;Z_CUR=null;renderNumerology();renderTarot();renderBazi();renderZiwei();if(typeof updateGateButtons==="function")updateGateButtons()}
+function renderAll(){BZ_CUR=null;Z_CUR=null;renderNumerology();renderTarot();renderBazi();renderZiwei();if(typeof renderQimen==="function")renderQimen();if(typeof updateGateButtons==="function")updateGateButtons()}
 
 // ========== 生命靈數 ==========
 const digitSum=s=>String(s).split("").reduce((a,b)=>a+ +b,0);
